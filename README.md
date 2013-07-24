@@ -67,7 +67,7 @@ Call of your API
 	}
 	catch (ApiCallException $e)
 	{
-		switch ($e->getCode())
+		switch ($e->getStatus()->getCode())
 		{
 			// Handle specific http error code here.
 			case '404':
@@ -89,7 +89,7 @@ You can use all basic REST methods the same way:
 You can retrieve the status of the last http request in this way:
 
 ``` php
-	$api->getLastStatus();
+	$status = $api->getLastStatus();
 ```
 
 Documentation
