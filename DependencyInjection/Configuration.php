@@ -20,9 +20,38 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('da_api_client');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->arrayNode('api')
+                   ->useAttributeAsKey('dumb')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('base_url')
+                                ->isRequired(true)
+                            ->end()
+                            ->scalarNode('api_token')
+                                ->isRequired(true)
+                            ->end()
+                            ->scalarNode('cache_enabled')
+                                ->defaultValue(true)
+                            ->end()
+                            ->arrayNode('client')
+                                ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('service')
+                                            ->defaultValue('da_api_client.api')
+                                        ->end()
+                                        ->scalarNode('implementor')
+                                            ->defaultValue('da_api_client.api_implementor')
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }

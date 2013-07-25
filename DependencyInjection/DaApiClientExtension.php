@@ -24,5 +24,7 @@ class DaApiClientExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        $this->container->setParameter('da_api_client.config', $config);
     }
 }
