@@ -14,7 +14,7 @@ namespace Da\ApiClientBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Compiler\Reference;
 
 /**
  * ResolveApiClientCompilerPass resolve the API client from the configuration.
