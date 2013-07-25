@@ -6,7 +6,7 @@ DaApiClientBundle is a Symfony2's bundle allowing to discuss in a simple and sec
 Installation
 ------------
 
-Installation is a quick 2 step process.
+Installation is a quick 2 steps process.
 
 ### Step 1: Add in composer
 

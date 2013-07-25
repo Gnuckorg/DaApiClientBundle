@@ -27,5 +27,5 @@
         "psr-0": { "Da\\ApiClientBundle": "" }
     },
     "minimum-stability": "dev",
-    "target-dir": "Da/ProtoBundle"
+    "target-dir": "Da/ApiClientBundle"
 }
