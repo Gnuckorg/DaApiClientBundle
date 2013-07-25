@@ -29,10 +29,8 @@ Then, you must define it as a service:
 
 service:
     my_own.my_api_client:
-        class: My\OwnBundle\HttpClient\MyApiClient
-        parent: da_api_client.api
-        abstract: false
-        public: false
+        class:     My\OwnBundle\HttpClient\MyApiClient
+        arguments: [null, null] # You can add more arguments but let the first two null.
 ```
 
 Link your API client to a configured API
@@ -44,7 +42,7 @@ Link your API client to a configured API
 da_api_client:
     api:
         my_api_name:
-            base_url:       'https://my-domain/api'
+            base_url:  'https://my-domain/api'
             api_token: 3e90o0xrzy4gsw4k0440sw4k4g8oog0ckoo4okgogs0wowo4sg
             client:    
                 service: my_own.my_api_client
@@ -78,7 +76,7 @@ Finally, you must precise it in the configuration:
 da_api_client:
     api:
         my_api_name:
-            base_url:       'https://my-domain/api'
+            base_url:  'https://my-domain/api'
             api_token: 3e90o0xrzy4gsw4k0440sw4k4g8oog0ckoo4okgogs0wowo4sg
             client:    
                 service: my_own.my_api_client

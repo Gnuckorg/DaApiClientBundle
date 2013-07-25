@@ -36,14 +36,12 @@ class ResolveApiClientCompilerPass implements CompilerPassInterface
             $service = $apiConfig['client']['service'];
             $implementor = $apiConfig['client']['implementor'];
 
-            $implementorDef = $container->getDefinition($implementor);
-            $implementorDef = new DefinitionDecorator($implementorDef);
+            $implementorDef = new DefinitionDecorator($implementor);
             $implementorDef->isPublic(false);
             $implementorId = 'da_api_client.api_implementor.'.$apiName;
             $container->setDefinition($implementorId, $implementorDef);
 
-            $serviceDef = $container->getDefinition($service);
-            $serviceDef = new DefinitionDecorator($implementorDef);
+            $serviceDef = new DefinitionDecorator($service);
             $serviceDef->isAbstract(false);
             $serviceDef->replaceArgument(0, new Reference($implementorId));
             $serviceDef->replaceArgument(1, $apiConfig);

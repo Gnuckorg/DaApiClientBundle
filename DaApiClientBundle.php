@@ -13,6 +13,6 @@ class DaApiClientBundle extends Bundle
 	{
 		parent::build($container);
 		
-		$container->addCompilerPass(new ResolveApiClientCompilerPass(), PassConfig::TYPE_OPTIMIZE);
+		$container->addCompilerPass(new ResolveApiClientCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);
 	}
 }
