@@ -1,14 +1,14 @@
 parameters:
-	da_api_client.api.class:             Da\ApiClientBundle\HttpClient\RestApiClientBridge
-	da_api_client.api_implementor.class: Da\ApiClientBundle\HttpClient\RestApiClientBasicImplementor
+    da_api_client.api.class:             Da\ApiClientBundle\HttpClient\RestApiClientBridge
+    da_api_client.api_implementor.class: Da\ApiClientBundle\HttpClient\RestApiClientBasicImplementor
 
 services:
-	da_api_client.api:
-		class:     %da_api_client.api.class%
-		arguments: [null, null]
-		abstract:  true
+    da_api_client.api:
+        class:     %da_api_client.api.class%
+        arguments: [null, null]
+        abstract:  true
 
-	da_api_client.api_implementor:
-		class:     %da_api_client.api_implementor.class%
-		arguments: []
-		abstract:  true
+    da_api_client.api_implementor:
+        class:     %da_api_client.api_implementor.class%
+        arguments: []
+        abstract:  true

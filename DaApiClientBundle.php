@@ -9,10 +9,10 @@ use Da\ApiClientBundle\DependencyInjection\Compiler\ResolveApiClientCompilerPass
 
 class DaApiClientBundle extends Bundle
 {
-	public function build(ContainerBuilder $container)
-	{
-		parent::build($container);
-		
-		$container->addCompilerPass(new ResolveApiClientCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);
-	}
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+        
+        $container->addCompilerPass(new ResolveApiClientCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);
+    }
 }
