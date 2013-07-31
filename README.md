@@ -100,4 +100,4 @@ You can do a lot more than that! Check the full [documentation](https://github.c
 What about the API server side?
 -------------------------------
 
-Take a look at the DaApiServerBundle!
+Take a look at the [DaApiServerBundle](https://github.com/Gnuckorg/DaApiServerBundle)!
