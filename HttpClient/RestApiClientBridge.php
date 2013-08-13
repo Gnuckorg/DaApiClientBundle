@@ -30,14 +30,14 @@ class RestApiClientBridge implements RestApiClientInterface
      * Constructor.
      *
      * @param RestApiClientImplementorInterface $implementor
-     * @param array                             $config
+     * @param array                             $configuration
      */
-    public function __construct(RestApiClientImplementorInterface $implementor, array $config)
+    public function __construct(RestApiClientImplementorInterface $implementor, array $configuration)
     {
         $this->implementor = $implementor;
-        $this->implementor->setBaseUrl($config['base_url']);
-        $this->implementor->setApiToken($config['api_token']);
-        $this->implementor->enableCache($config['cache_enabled']);
+        $this->implementor->setEndpointRoot($configuration['endpoint_root']);
+        $this->implementor->setSecurityToken($configuration['security_token']);
+        $this->implementor->enableCache($configuration['cache_enabled']);
     }
 
     /**

@@ -31,22 +31,25 @@ class ResolveApiClientCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $config = $container->getParameter('da_api_client.config');
+        $configuration = $container->getParameter('da_api_client.configuration');
 
-        foreach ($config['api'] as $apiName => $apiConfig) {
-            $service = $apiConfig['client']['service'];
-            $implementor = $apiConfig['client']['implementor'];
+        foreach ($configuration['api'] as $apiName => $apiConfiguration) {
+            $service = $apiConfiguration['client']['service'];
+            $implementor = $apiConfiguration['client']['implementor'];
 
-            $implementorDef = new DefinitionDecorator($implementor);
-            $implementorDef->isPublic(false);
-            $implementorId = 'da_api_client.api_implementor.'.$apiName;
-            $container->setDefinition($implementorId, $implementorDef);
+            $implementorDefinition = new DefinitionDecorator($implementor);
+            $implementorDefinition->isPublic(false);
+            $implementorId = sprintf('da_api_client.api_implementor.%s', $apiName);
+            $container->setDefinition($implementorId, $implementorDefinition);
 
-            $serviceDef = new DefinitionDecorator($service);
-            $serviceDef->isAbstract(false);
-            $serviceDef->replaceArgument(0, new Reference($implementorId));
-            $serviceDef->replaceArgument(1, $apiConfig);
-            $container->setDefinition('da_api_client.api.'.$apiName, $serviceDef);
+            $serviceDefinition = new DefinitionDecorator($service);
+            $serviceDefinition->isAbstract(false);
+            $serviceDefinition->replaceArgument(0, new Reference($implementorId));
+            $serviceDefinition->replaceArgument(1, $apiConfiguration);
+            $container->setDefinition(
+                sprintf('da_api_client.api.%s', $apiName),
+                $serviceDefinition
+            );
         }
     }
 }

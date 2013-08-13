@@ -21,18 +21,18 @@ namespace Da\ApiClientBundle\HttpClient;
 abstract class AbstractRestApiClientImplementor implements RestApiClientImplementorInterface
 {
     /**
-     * The base URL.
+     * The endpoint root.
      *
      * @var string
      */
-    protected $baseUrl = '';
+    protected $endpointRoot;
     
     /**
-     * The API token.
+     * The security token.
      *
      * @var string
      */ 
-    protected $apiToken = '';
+    protected $securityToken;
 
     /**
      * The flag to enable the cache.
@@ -44,17 +44,37 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     /**
      * {@inheritdoc}
      */
-    public function setBaseUrl($baseUrl)
+    public function setEndpointRoot($endpointRoot)
     {
-        $this->baseUrl = $baseUrl;
+        $this->endpointRoot = $endpointRoot;
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setApiToken($apiToken)
+    public function getEndpointRoot()
     {
-        $this->apiToken = $apiToken;
+        return $this->endpointRoot;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSecurityToken($securityToken)
+    {
+        $this->securityToken = $securityToken;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSecurityToken()
+    {
+        return $this->securityToken;
     }
 
     /**
@@ -62,11 +82,16 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
      */
     public function enableCache($cacheEnabled)
     {
-        if ($cacheEnabled) {
-            $this->cacheEnabled = true; 
-        }
-        else {
-            $this->cacheEnabled = false; 
-        }
+        $this->cacheEnabled = (bool)$cacheEnabled;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCacheEnabled()
+    {
+        return $this->cacheEnabled;
     }
 }

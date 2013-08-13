@@ -24,30 +24,38 @@ interface RestApiClientInterface
      *
      * @param string $path        The relative path to the webservice.
      * @param string $queryString The specific queryString to the webservice.
+     * @return string
+     * @throw ApiHttpResponseException
      */
-    function get($path, $queryString = null);
+    public function get($path, $queryString = null);
 
     /**
      * Post
      *
      * @param string $path        The relative path to the webservice.
      * @param string $queryString The specific queryString to the webservice.
+     * @return string
+     * @throw ApiHttpResponseException
      */
-    function post($path, $queryString = null);
+    public function post($path, $queryString = null);
 
     /**
      * Put
      *
      * @param string $path        The relative path to the webservice.
      * @param string $queryString The specific queryString to the webservice.
+     * @return string
+     * @throw ApiHttpResponseException
      */
-    function put($path, $queryString = null);
+    public function put($path, $queryString = null);
 
     /**
      * Delete
      *
      * @param string $path        The relative path to the webservice.
      * @param string $queryString The specific queryString to the webservice.
+     * @return string
+     * @throw ApiHttpResponseException
      */
-    function delete($path, $queryString = null);
+    public function delete($path, $queryString = null);
 }

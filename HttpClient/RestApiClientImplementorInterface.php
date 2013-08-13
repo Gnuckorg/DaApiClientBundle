@@ -20,23 +20,47 @@ namespace Da\ApiClientBundle\HttpClient;
 interface RestApiClientImplementorInterface extends RestApiClientInterface
 {
     /**
-     * Set the base URL of the API (from which all the path will be relative to).
+     * Set the endpoint root URL of the API (from which all the path will be relative to).
      *
-     * @param string $baseUrl The base URL.
+     * @param string $endpointRoot The api endpoint root URL.
+     * @return RestApiClientImplementorInterface.
      */
-    function setBaseUrl($baseUrl);
+    function setEndpointRoot($endpointRoot);
 
     /**
-     * Set the API token to authenticate your client in the API.
+     * Get the endpoint root URL of the API (from which all the path will be relative to).
      *
-     * @param string $apiToken The API token.
+     * @return string The api endpoint root URL.
      */
-    function setApiToken($apiToken);
+    function getEndpointRoot();
+
+    /**
+     * Set the security token to authenticate your client in the API.
+     *
+     * @param string $securityToken The security token.
+     * @return RestApiClientImplementorInterface.
+     */
+    function setSecurityToken($securityToken);
+
+    /**
+     * Get the security token to authenticate your client in the API.
+     *
+     * @return string The security token.
+     */
+    function getSecurityToken();
 
     /**
      * Enable or disable the cache.
      *
-     * @param string $enableCache Should enable the cache or not?
+     * @param bool $enableCache Should enable the cache or not
+     * @return RestApiClientImplementorInterface.
      */
     function enableCache($enableCache);
+
+    /**
+     * Informe about the cache activation.
+     *
+     * @return bool true if the cache is enabled.
+     */
+    function isCacheEnabled();
 }
