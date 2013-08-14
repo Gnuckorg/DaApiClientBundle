@@ -16,6 +16,7 @@ namespace Da\ApiClientBundle\HttpClient;
  * should implement to be used as an implementor by the RestApiClientBridge.
  *
  * @author Thomas Prelot
+ * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
 interface RestApiClientImplementorInterface extends RestApiClientInterface
 {

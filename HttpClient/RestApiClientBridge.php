@@ -16,6 +16,7 @@ namespace Da\ApiClientBundle\HttpClient;
  * to dynamically change the implementation for the REST API client.
  *
  * @author Thomas Prelot
+ * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
 class RestApiClientBridge implements RestApiClientInterface
 {

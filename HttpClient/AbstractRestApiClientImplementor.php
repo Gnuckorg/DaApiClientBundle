@@ -17,6 +17,7 @@ namespace Da\ApiClientBundle\HttpClient;
  * of the RestApiClientImplementorInterface interface.
  *
  * @author Thomas Prelot
+ * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
 abstract class AbstractRestApiClientImplementor implements RestApiClientImplementorInterface
 {
@@ -93,5 +94,15 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     public function isCacheEnabled()
     {
         return $this->cacheEnabled;
+    }
+
+    /**
+     * Check if the security token is present
+     *
+     * @return boolean true if the token is set.
+     */
+    public function hasSecurityToken()
+    {
+        return null !== $this->getSecurityToken();
     }
 }
