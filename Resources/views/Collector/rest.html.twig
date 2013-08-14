@@ -1,0 +1,60 @@
+{% extends "WebProfilerBundle:Profiler:layout.html.twig" %}
+
+{% block toolbar %}
+    {% set icon %}
+        <img alt="Rest API" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QQdDTkHrb8HmQAAAcxJREFUSMftlsFq1FAUhr8/tyOGQZ9CXHQ7LyC4qFi3LvQB3I+v4cJVFxVBEWq7tgwMdAR9DUHwAdy5GiH5XfTeckknTjJJF4IHDiHJzf3Pf+45fw78t5FNjfs7wDmwluQhG9sWcBt4AvxqW3cKeGT/kgPsNQCfS7LtZ8AP4GkKeAeS+8AHSWu75XNJyS8iyPsNQQGErWclzSRZ0rJLdEHSW8CSVmVZCqAoirTZYlRASRRFEYDE9Cx7N++S4r4MASjLEuBjrNjPko4j69EAZ8ABcDcxjbZKVSepHsKwaKx7BSyB+zmgpO/p3nYeSG8rGlH9ztugrmskzW2/iO1iDUFrKfnLMg0h1HX9yfbjyGwo1saUXllVVZXtQ0BRpmT7yuP5pALKr4sQQugN2Ec2Y7qR9NL2YVVV1Y0A+lKzFP2N7ddJHGJGsH2r0xl2AGtW7b30PNo34BHw82+9s4wVOuvQZ+nMjrM+PZtMJtqkXIMBI9gcYDqd5r+2VefM9WS4SIKeMUja+64TaB/AltIPESwxvda7exvGAoD9bU0eVejaWCHpyPYD4CFwGn/mrdr7NRPpnT0fMSSdbB2iJK13HCt6D1E3MxqOoMH/jv0BrUrn9lZvEP4AAAAASUVORK5CYII=" />
+        <span class="sf-toolbar-status">
+            {{ collector.countRestApiQueries }}
+        </span>
+    {% endset %}
+    {% set text %}
+        <div class="sf-toolbar-info-piece">
+            <b>Rest API Queries</b>
+            <span>{{ collector.countRestApiQueries }}</span>
+        </div>
+        <div class="sf-toolbar-info-piece">
+            <b>Query time</b>
+            <span>{{ '%0.2f'|format(collector.sumExecutionMS * 1000) }} ms</span>
+        </div>
+    {% endset %}
+    {% include "@WebProfiler/Profiler/toolbar_item.html.twig" with { "link": profiler_url } %}
+{% endblock %}
+
+{% block menu %}
+    <span class="label">
+        <span class="icon">
+            <img alt="Rest API" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QQdDTkHrb8HmQAAAcxJREFUSMftlsFq1FAUhr8/tyOGQZ9CXHQ7LyC4qFi3LvQB3I+v4cJVFxVBEWq7tgwMdAR9DUHwAdy5GiH5XfTeckknTjJJF4IHDiHJzf3Pf+45fw78t5FNjfs7wDmwluQhG9sWcBt4AvxqW3cKeGT/kgPsNQCfS7LtZ8AP4GkKeAeS+8AHSWu75XNJyS8iyPsNQQGErWclzSRZ0rJLdEHSW8CSVmVZCqAoirTZYlRASRRFEYDE9Cx7N++S4r4MASjLEuBjrNjPko4j69EAZ8ABcDcxjbZKVSepHsKwaKx7BSyB+zmgpO/p3nYeSG8rGlH9ztugrmskzW2/iO1iDUFrKfnLMg0h1HX9yfbjyGwo1saUXllVVZXtQ0BRpmT7yuP5pALKr4sQQugN2Ec2Y7qR9NL2YVVV1Y0A+lKzFP2N7ddJHGJGsH2r0xl2AGtW7b30PNo34BHw82+9s4wVOuvQZ+nMjrM+PZtMJtqkXIMBI9gcYDqd5r+2VefM9WS4SIKeMUja+64TaB/AltIPESwxvda7exvGAoD9bU0eVejaWCHpyPYD4CFwGn/mrdr7NRPpnT0fMSSdbB2iJK13HCt6D1E3MxqOoMH/jv0BrUrn9lZvEP4AAAAASUVORK5CYII=" />
+        </span>
+        <strong>Rest API</strong>
+        <span class="count">
+            <span>{{ collector.countRestApiQueries }}</span>
+            <span>{{ '%0.0f'|format(collector.sumExecutionMS * 1000) }} ms</span>
+        </span>
+    </span>
+    {# the menu content #}
+{% endblock %}
+
+{% block panel %}
+    <h2>Rest API Queries details</h2>
+
+    <table>
+        <tr>
+            <th>Endpoint</th>
+            <th>Method</th>
+            <th>QueryString</th>
+            <th>ExecutionMS</th>
+            <th>FromCache</th>
+            <th>CacheTTL</th>
+        </tr>
+        {% for query in collector.restApiQueries %}
+            <tr>
+                <td><code>{{ query.endpoint }}</code></td>
+                <td><code>{{ query.method }}</code></td>
+                <td><code>{{ query.queryString }}</code></td>
+                <td><code>{{ query.executionMS }}</code></td>
+                <td><code>TODO</code></td>
+                <td><code>TODO</code></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

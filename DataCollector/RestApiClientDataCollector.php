@@ -20,22 +20,69 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RestApiClientDataCollector extends DataCollector
 {
+    protected $restLogger;
+
     /**
-     * {@inheritdoc}
+     * Constructor
+     *
+     * @param \Da\ApiClientBundle\Logging\RestLoggerInterface $restLogger
      */
-    public function collect(Request $request, Response $response, \Exception $exception = null)
+    public function __construct(\Da\ApiClientBundle\Logging\RestLoggerInterface $restLogger)
     {
-        $this->data = array(
-            'rest_api' => "TODO",
-        );
+        $this->restLogger = $restLogger;
+    }
+
+    /**
+     * Get Rest Logger
+     *
+     * @return \Da\ApiClientBundle\Logging\RestLoggerInterface
+     */
+    public function getRestLogger()
+    {
+        return $this->restLogger;
+    }
+
+    /**
+     * Get Rest API queries
+     *
+     * @return array
+     */
+    public function getRestApiQueries()
+    {
+        return $this->data['rest_api_queries'];
+    }
+
+    /**
+     * Count Rest API queries
+     *
+     * @return integer
+     */
+    public function countRestApiQueries()
+    {
+        return count($this->getRestApiQueries());
+    }
+
+    /**
+     * Sum the queries execution times
+     *
+     * @return float The execution time in ms
+     */
+    public function getSumExecutionMS()
+    {
+        $sum = 0;
+        foreach($this->getRestApiQueries() as $query) {
+            $sum += $query['executionMS'];
+        }
+
+        return $sum;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getRestApi()
+    public function collect(Request $request, Response $response, \Exception $exception = null)
     {
-        return $this->data['rest_api'];
+        $this->data['rest_api_queries'] = $this->getRestLogger()->getQueries();
     }
 
     /**

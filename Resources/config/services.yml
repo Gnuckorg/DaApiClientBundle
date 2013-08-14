@@ -2,6 +2,7 @@ parameters:
     da_api_client.api.class:             Da\ApiClientBundle\HttpClient\RestApiClientBridge
     da_api_client.api_implementor.class: Da\ApiClientBundle\HttpClient\RestApiClientBasicImplementor
     da_api_client.rest_logger.class:     Da\ApiClientBundle\Logging\DebugStack
+    da_api_client.data_collector.class:  Da\ApiClientBundle\DataCollector\RestApiClientDataCollector
 
 services:
     da_api_client.api:
@@ -16,11 +17,11 @@ services:
 
     da_api_client.rest_logger:
         class:     %da_api_client.rest_logger.class%
-        arguments: []
 
-    data_collector.da_api_client:
-        class: Da\ApiClientBundle\DataCollector\RestApiClientDataCollector
+    da_api_client.data_collector:
+        class:     %da_api_client.data_collector.class%
+        arguments: [@da_api_client.rest_logger]
         tags:
-            - { name: data_collector }
+            - { name: data_collector, template: "DaApiClientBundle:Collector:rest", id: "rest_api" }
 
 

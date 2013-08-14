@@ -14,32 +14,46 @@ namespace Da\ApiClientBundle\Logging;
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
-class DebugStack implements RestLogger
+class DebugStack implements RestLoggerInterface
 {
     /**
-     * @var array $queries Executed REST API queries.
+     * Executed REST API queries.
+     *
+     * @var array
      */
-    public $queries = array();
+    protected $queries = array();
 
     /** 
-     * @var boolean $enabled If Debug Stack is enabled (log queries) or not.
+     * If Debug Stack is enabled (log queries) or not.
+     *
+     * @var boolean
      */
-    public $enabled = true;
+    protected $enabled = true;
 
-    public $start = null;
-    public $currentQuery = 0;
+    protected $start = null;
+    protected $currentQuery = 0;
+
+    /**
+     * Get queries
+     *
+     * @return array logged queries
+     */
+    public function getQueries()
+    {
+        return $this->queries;
+    }
 
     /**
      * {@inheritdoc}
      */
-    public function startQuery($endpoint, $method = null, array $params = null)
+    public function startQuery($endpoint, $method = null, array $queryString = null)
     {
         if ($this->enabled) {
             $this->start = microtime(true);
             $this->queries[++$this->currentQuery] = array(
                 'endpoint'      => $endpoint,
                 'method'        => $method,
-                'params'        => $params,
+                'queryString'   => json_encode($queryString),
                 'executionMS'   => 0
             );
         }

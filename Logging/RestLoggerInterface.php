@@ -14,16 +14,16 @@ namespace Da\ApiClientBundle\Logging;
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
-interface RestLogger
+interface RestLoggerInterface
 {
     /**
      * Logs a REST Api statement somewhere.
      *
      * @param string $endpoint The enpoint to be called.
      * @param array $method The http method used
-     * @param array $params The request api parameters.
+     * @param array $queryString The api query string.
      */
-    public function startQuery($endpoint, $method = null, array $params = null);
+    public function startQuery($endpoint, $method = null, array $queryString = null);
 
 
     /**

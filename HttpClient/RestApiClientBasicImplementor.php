@@ -28,7 +28,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * Constructor.
      */
-    public function __construct(\Da\ApiClientBundle\Logging\RestLogger $logger)
+    public function __construct(\Da\ApiClientBundle\Logging\RestLoggerInterface $logger)
     {
         $this->cUrl = null;
         $this->logger = $logger;
