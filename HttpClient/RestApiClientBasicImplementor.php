@@ -49,6 +49,12 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function get($path, $queryString = null)
     {
+        $path = sprintf("%s%s%s", 
+            $path,
+            preg_match("#\?#", $path) ? ( preg_match("#\?$#", $path) ? '' : '&' ) : '?', 
+            http_build_query($queryString)
+        );
+
         return $this
             ->initCurl($path)
             ->execute($queryString, 'GET')
@@ -63,6 +69,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
         return $this
             ->initCurl($path)
             ->addCurlOption(CURLOPT_POST, true)
+            ->addCurlOption(CURLOPT_POSTFIELDS, $queryString)
             ->execute($queryString, 'POST')
         ;
     }
@@ -77,6 +84,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
             ->addCurlOption(CURLOPT_PUT, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, "PUT")
             ->addCurlOption(CURLOPT_HTTPHEADER, array('X-HTTP-Method-Override: PUT'))
+            ->addCurlOption(CURLOPT_POSTFIELDS, $queryString)
             ->execute($queryString, 'PUT')
         ;
     }
@@ -90,6 +98,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
             ->initCurl($path)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, "DELETE")
             ->addCurlOption(CURLOPT_HTTPHEADER, array('X-HTTP-Method-Override: DELETE'))
+            ->addCurlOption(CURLOPT_POSTFIELDS, $queryString)
             ->execute($queryString, 'DELETE')
         ;
     }
@@ -157,8 +166,6 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     protected function execute($queryString = null, $method = null)
     {
-        $this->addCurlOption(CURLOPT_POSTFIELDS, $queryString);
-
         $this->getLogger()->startQuery(
             curl_getinfo($this->cUrl, CURLINFO_EFFECTIVE_URL),
             $method,
