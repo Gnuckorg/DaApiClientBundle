@@ -14,13 +14,16 @@ services:
         class:     %da_api_client.api_implementor.class%
         arguments: [@da_api_client.rest_logger]
         abstract:  true
+        public:    false
 
     da_api_client.rest_logger:
         class:     %da_api_client.rest_logger.class%
+        public:    false
 
     da_api_client.data_collector:
         class:     %da_api_client.data_collector.class%
         arguments: [@da_api_client.rest_logger]
+        public:    false
         tags:
             - { name: data_collector, template: "DaApiClientBundle:Collector:rest", id: "rest_api" }
 
