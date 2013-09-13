@@ -15,7 +15,7 @@ namespace Da\ApiClientBundle\HttpClient;
  * RestApiClientImplementorInterface is the interface that an RestApiClientImplementor
  * should implement to be used as an implementor by the RestApiClientBridge.
  *
- * @author Thomas Prelot
+ * @author Thomas Prelot <tprelot@gmail.com>
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
 interface RestApiClientImplementorInterface extends RestApiClientInterface
@@ -26,14 +26,14 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
      * @param string $endpointRoot The api endpoint root URL.
      * @return RestApiClientImplementorInterface.
      */
-    function setEndpointRoot($endpointRoot);
+    public function setEndpointRoot($endpointRoot);
 
     /**
      * Get the endpoint root URL of the API (from which all the path will be relative to).
      *
      * @return string The api endpoint root URL.
      */
-    function getEndpointRoot();
+    public function getEndpointRoot();
 
     /**
      * Set the security token to authenticate your client in the API.
@@ -41,14 +41,14 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
      * @param string $securityToken The security token.
      * @return RestApiClientImplementorInterface.
      */
-    function setSecurityToken($securityToken);
+    public function setSecurityToken($securityToken);
 
     /**
      * Get the security token to authenticate your client in the API.
      *
      * @return string The security token.
      */
-    function getSecurityToken();
+    public function getSecurityToken();
 
     /**
      * Enable or disable the cache.
@@ -56,12 +56,12 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
      * @param bool $enableCache Should enable the cache or not
      * @return RestApiClientImplementorInterface.
      */
-    function enableCache($enableCache);
+    public function enableCache($enableCache);
 
     /**
      * Informe about the cache activation.
      *
      * @return bool true if the cache is enabled.
      */
-    function isCacheEnabled();
+    public function isCacheEnabled();
 }

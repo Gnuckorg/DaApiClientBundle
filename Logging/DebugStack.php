@@ -51,10 +51,14 @@ class DebugStack implements RestLoggerInterface
         if ($this->enabled) {
             $this->start = microtime(true);
             $this->queries[++$this->currentQuery] = array(
-                'endpoint'      => $endpoint,
-                'method'        => $method,
-                'queryString'   => json_encode($queryString),
-                'executionMS'   => 0
+                'endpoint'        => $endpoint,
+                'method'          => $method,
+                'queryString'     => json_encode($queryString),
+                'executionMS'     => 0,
+                'responseCode'    => null,
+                'responseContent' => null,
+                'cacheEnabled'    => null,
+                'cacheTTL'        => null
             );
         }
     }
@@ -62,10 +66,12 @@ class DebugStack implements RestLoggerInterface
     /**
      * {@inheritdoc}
      */
-    public function stopQuery()
+    public function stopQuery($responseCode, $responseContent)
     {
         if ($this->enabled) {
             $this->queries[$this->currentQuery]['executionMS'] = microtime(true) - $this->start;
+            $this->queries[$this->currentQuery]['responseCode'] = $responseCode;
+            $this->queries[$this->currentQuery]['responseContent'] = $responseContent;
         }
     }
 }

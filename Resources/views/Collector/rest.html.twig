@@ -43,7 +43,9 @@
             <th>Method</th>
             <th>QueryString</th>
             <th>ExecutionMS</th>
-            <th>FromCache</th>
+            <th>HttpReponseCode</th>
+            <th>HttpReponseContent</th>
+            <th>CacheEnabled</th>
             <th>CacheTTL</th>
         </tr>
         {% for query in collector.restApiQueries %}
@@ -52,8 +54,10 @@
                 <td><code>{{ query.method }}</code></td>
                 <td><code>{{ query.queryString }}</code></td>
                 <td><code>{{ query.executionMS }}</code></td>
-                <td><code>TODO</code></td>
-                <td><code>TODO</code></td>
+                <td><code>{{ query.responseCode }}</code></td>
+                <td><code>{{ query.responseContent }}</code></td>
+                <td><code>{{ query.cacheEnabled }}</code></td>
+                <td><code>{{ query.cacheTTL }}</code></td>
             </tr>
         {% endfor %}
     </table>

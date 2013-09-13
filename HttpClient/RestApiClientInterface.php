@@ -21,6 +21,13 @@ namespace Da\ApiClientBundle\HttpClient;
 interface RestApiClientInterface
 {
     /**
+     * Get the api endpoint root
+     *
+     * @return string
+     */
+    public function getEndpointRoot();
+
+    /**
      * Get
      *
      * @param string $path        The relative path to the webservice.

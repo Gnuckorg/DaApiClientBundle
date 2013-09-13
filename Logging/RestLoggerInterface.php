@@ -28,6 +28,9 @@ interface RestLoggerInterface
 
     /**
      * Mark the last started query as stopped. This can be used for timing of queries.
+     *
+     * @param int $responseCode The http response code
+     * @param string $responseContent The http response content
      */
-    public function stopQuery();
+    public function stopQuery($responseCode, $responseContent);
 }

@@ -15,7 +15,7 @@ namespace Da\ApiClientBundle\HttpClient;
  * RestApiClientBridge is the abstraction class of a bridge pattern allowing
  * to dynamically change the implementation for the REST API client.
  *
- * @author Thomas Prelot
+ * @author Thomas Prelot <tprelot@gmail.com>
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
 class RestApiClientBridge implements RestApiClientInterface
@@ -39,6 +39,14 @@ class RestApiClientBridge implements RestApiClientInterface
         $this->implementor->setEndpointRoot($configuration['endpoint_root']);
         $this->implementor->setSecurityToken($configuration['security_token']);
         $this->implementor->enableCache($configuration['cache_enabled']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEndpointRoot()
+    {
+        return $this->implementor->getEndpointRoot();
     }
 
     /**

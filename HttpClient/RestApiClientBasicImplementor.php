@@ -49,11 +49,13 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function get($path, $queryString = null)
     {
-        $path = sprintf("%s%s%s", 
-            $path,
-            preg_match("#\?#", $path) ? ( preg_match("#\?$#", $path) ? '' : '&' ) : '?', 
-            http_build_query($queryString)
-        );
+        if(null !== $queryString) {
+            $path = sprintf("%s%s%s", 
+                $path,
+                preg_match("#\?#", $path) ? ( preg_match("#\?$#", $path) ? '' : '&' ) : '?', 
+                http_build_query($queryString)
+            );
+        }
 
         return $this
             ->initCurl($path)
@@ -172,18 +174,18 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
             $queryString
         );
 
-        $data = curl_exec($this->cUrl);
-
-        $this->getLogger()->stopQuery();
+        $httpContent = curl_exec($this->cUrl);
 
         $path = curl_getinfo($this->cUrl, CURLINFO_EFFECTIVE_URL);
         $httpCode = curl_getinfo($this->cUrl, CURLINFO_HTTP_CODE);
         curl_close($this->cUrl);
 
+        $this->getLogger()->stopQuery($httpCode, $httpContent);
+
         if($httpCode >= 400) {
-            throw new ApiHttpResponseException($path, $httpCode, $data);
+            throw new ApiHttpResponseException($path, $httpCode, $httpContent);
         }
 
-        return $data;
+        return $httpContent;
     }
 }
