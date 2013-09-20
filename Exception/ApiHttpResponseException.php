@@ -58,6 +58,6 @@ class ApiHttpResponseException extends \Exception
      */
     public function getHttpCode()
     {
-        return $this->httpCode();
+        return $this->httpCode;
     }
 }
