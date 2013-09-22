@@ -45,17 +45,34 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     }
 
     /**
+     * Add query string
+     *
+     * @param string $path
+     * @param array|string $queryString
+     * @return string
+     */
+    public static function addQueryString($path, $queryString)
+    {
+        if(null === $queryString) {
+            return $path;
+        }
+
+        return sprintf("%s%s%s",
+            $path,
+            preg_match("#\?#", $path) ? (
+                preg_match("#\?$#", $path) ?
+                '' : '&'
+            ) : '?',
+            http_build_query($queryString)
+        );
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function get($path, $queryString = null)
     {
-        if(null !== $queryString) {
-            $path = sprintf("%s%s%s", 
-                $path,
-                preg_match("#\?#", $path) ? ( preg_match("#\?$#", $path) ? '' : '&' ) : '?', 
-                http_build_query($queryString)
-            );
-        }
+        $path = self::addQueryString($path, $queryString);
 
         return $this
             ->initCurl($path)
@@ -83,7 +100,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     {
         return $this
             ->initCurl($path)
-            ->addCurlOption(CURLOPT_PUT, true)
+            ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, "PUT")
             ->addCurlOption(CURLOPT_HTTPHEADER, array('X-HTTP-Method-Override: PUT'))
             ->addCurlOption(CURLOPT_POSTFIELDS, $queryString)
@@ -96,11 +113,12 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function delete($path, $queryString = null)
     {
+        $path = self::addQueryString($path, $queryString);
+
         return $this
             ->initCurl($path)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, "DELETE")
             ->addCurlOption(CURLOPT_HTTPHEADER, array('X-HTTP-Method-Override: DELETE'))
-            ->addCurlOption(CURLOPT_POSTFIELDS, $queryString)
             ->execute($queryString, 'DELETE')
         ;
     }

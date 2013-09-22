@@ -3,16 +3,18 @@ DaApiClientBundle
 
 DaApiClientBundle is a Symfony2's bundle allowing to discuss in a simple and secure way with an API.
 
+
 Installation
 ------------
 
 Installation is a quick 2 steps process.
 
+
 ### Step 1: Add in composer
 
 Add the bundle in the composer.json file:
 
-``` js
+```json
 // composer.json
 
 "require": {
@@ -21,18 +23,19 @@ Add the bundle in the composer.json file:
 },
 ```
 
-And update your vendors:
+Update your vendors with composer:
 
-``` bash
+```sh
 composer update      # WIN
 composer.phar update # LINUX
 ```
+
 
 ### Step 2: Declare in the kernel
 
 Declare the bundle in your kernel:
 
-``` php
+```php
 // app/AppKernel.php
 
 $bundles = array(
@@ -41,10 +44,11 @@ $bundles = array(
 );
 ```
 
-Configuration of your API
--------------------------
 
-``` yaml
+Configuration to use your API
+-----------------------------
+
+```yaml
 # app/config/config.yml
 
 da_api_client:
@@ -55,20 +59,17 @@ da_api_client:
             cache_enabled: true
 ```
 
-Call of your API
-----------------
 
-``` php
-try
-{
+How to use
+----------
+
+```php
+try {
     $api = $container->get('da_api_client.api.my_api_name')
     $parameters = array('offset' => 0, 'limit' => 20);
     $friends = $api->get('/friends', $parameters);
-}
-catch (ApiCallException $e)
-{
-    switch ($e->getStatus()->getCode())
-    {
+} catch (ApiCallException $e) {
+    switch ($e->getHttpCode()) {
         // Handle specific http error code here.
         case '404':
             // ...
@@ -77,27 +78,24 @@ catch (ApiCallException $e)
 }
 ```
 
-You can use all basic REST methods the same way:
+You can use all basic REST methods in the same way:
 
-``` php
+```php
 $friends = $api->get('/friends', array(...));
-$status = $api->post('/friends/add', array(...));
-$status = $api->put('/friends/update', array(...));
+$friend = $api->post('/friends/add', array(...));
+$friend = $api->put('/friends/update', array(...));
 $status = $api->delete('/friends/remove', array(...));
 ```
 
-You can retrieve the status of the last http request in this way:
-
-``` php
-$status = $api->getLastStatus();
-```
 
 Documentation
 -------------
 
 You can do a lot more than that! Check the full [documentation](https://github.com/Gnuckorg/DaApiClientBundle/blob/master/Resources/doc/index.md)!
 
+
 What about the API server side?
 -------------------------------
 
 Take a look at the [DaApiServerBundle](https://github.com/Gnuckorg/DaApiServerBundle)!
+
