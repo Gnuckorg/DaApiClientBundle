@@ -30,40 +30,48 @@ interface RestApiClientInterface
     /**
      * Get
      *
-     * @param string $path        The relative path to the webservice.
-     * @param string $queryString The specific queryString to the webservice.
+     * @param string $path       The relative path to the webservice.
+     * @param array $queryString The specific queryString to the webservice.
+     *
      * @return string
+     *
      * @throw ApiHttpResponseException
      */
-    public function get($path, $queryString = null);
+    public function get($path, array $queryString = array());
 
     /**
      * Post
      *
-     * @param string $path        The relative path to the webservice.
-     * @param string $queryString The specific queryString to the webservice.
+     * @param string $path       The relative path to the webservice.
+     * @param array $queryString The specific queryString to the webservice.
+     *
      * @return string
+     *
      * @throw ApiHttpResponseException
      */
-    public function post($path, $queryString = null);
+    public function post($path, array $queryString = array());
 
     /**
      * Put
      *
-     * @param string $path        The relative path to the webservice.
-     * @param string $queryString The specific queryString to the webservice.
+     * @param string $path       The relative path to the webservice.
+     * @param array $queryString The specific queryString to the webservice.
+     *
      * @return string
+     *
      * @throw ApiHttpResponseException
      */
-    public function put($path, $queryString = null);
+    public function put($path, array $queryString = array());
 
     /**
      * Delete
      *
-     * @param string $path        The relative path to the webservice.
-     * @param string $queryString The specific queryString to the webservice.
+     * @param string $path       The relative path to the webservice.
+     * @param array $queryString The specific queryString to the webservice.
+     *
      * @return string
+     *
      * @throw ApiHttpResponseException
      */
-    public function delete($path, $queryString = null);
+    public function delete($path, array $queryString = array());
 }

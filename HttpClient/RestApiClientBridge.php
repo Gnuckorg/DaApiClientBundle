@@ -52,7 +52,7 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
-    public function get($path, $queryString = null)
+    public function get($path, array $queryString = array())
     {
         return $this->implementor->get($path, $queryString);
     }
@@ -60,7 +60,7 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
-    public function post($path, $queryString = null)
+    public function post($path, array $queryString = array())
     {
         return $this->implementor->post($path, $queryString);
     }
@@ -68,7 +68,7 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
-    public function put($path, $queryString = null)
+    public function put($path, array $queryString = array())
     {
         return $this->implementor->put($path, $queryString);
     }
@@ -76,7 +76,7 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
-    public function delete($path, $queryString = null)
+    public function delete($path, array $queryString = array())
     {
         return $this->implementor->delete($path, $queryString);
     }

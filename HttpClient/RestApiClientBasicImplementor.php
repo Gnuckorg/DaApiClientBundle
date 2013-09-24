@@ -48,10 +48,11 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      * Add query string
      *
      * @param string $path
-     * @param array|string $queryString
+     * @param array  $queryString
+     *
      * @return string
      */
-    public static function addQueryString($path, $queryString)
+    public static function addQueryString($path, array $queryString = array())
     {
         if(null === $queryString) {
             return $path;
@@ -70,7 +71,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function get($path, $queryString = null)
+    public function get($path, array $queryString = array())
     {
         $path = self::addQueryString($path, $queryString);
 
@@ -83,7 +84,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function post($path, $queryString = null)
+    public function post($path, array $queryString = array())
     {
         return $this
             ->initCurl($path)
@@ -96,14 +97,14 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function put($path, $queryString = null)
+    public function put($path, array $queryString = array())
     {
         return $this
             ->initCurl($path)
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, "PUT")
             ->addCurlOption(CURLOPT_HTTPHEADER, array('X-HTTP-Method-Override: PUT'))
-            ->addCurlOption(CURLOPT_POSTFIELDS, $queryString)
+            ->addCurlOption(CURLOPT_POSTFIELDS, http_build_query($queryString))
             ->execute($queryString, 'PUT')
         ;
     }
@@ -111,14 +112,14 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function delete($path, $queryString = null)
+    public function delete($path, array $queryString = array())
     {
-        $path = self::addQueryString($path, $queryString);
-
         return $this
             ->initCurl($path)
+            ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, "DELETE")
             ->addCurlOption(CURLOPT_HTTPHEADER, array('X-HTTP-Method-Override: DELETE'))
+            ->addCurlOption(CURLOPT_POSTFIELDS, http_build_query($queryString))
             ->execute($queryString, 'DELETE')
         ;
     }
@@ -179,12 +180,14 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * Execute cUrl
      *
-     * @param string|array $queryString
+     * @param array  $queryString
      * @param string $method
+     *
      * @return string
+     *
      * @throw ApiHttpResponseException
      */
-    protected function execute($queryString = null, $method = null)
+    protected function execute(array $queryString = array(), $method = null)
     {
         $this->getLogger()->startQuery(
             curl_getinfo($this->cUrl, CURLINFO_EFFECTIVE_URL),
