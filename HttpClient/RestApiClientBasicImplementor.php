@@ -11,6 +11,8 @@
 
 namespace Da\ApiClientBundle\HttpClient;
 
+use Symfony\Component\Security\Core\SecurityContextInterface;
+use Da\ApiClientBundle\Logging\RestLoggerInterface;
 use Da\ApiClientBundle\Exception\ApiHttpResponseException;
 
 /**
@@ -24,14 +26,16 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
 
     protected $cUrl;
     protected $logger;
+    protected $securityContext;
 
     /**
      * Constructor.
      */
-    public function __construct(\Da\ApiClientBundle\Logging\RestLoggerInterface $logger)
+    public function __construct(RestLoggerInterface $logger, SecurityContextInterface $securityContext)
     {
         $this->cUrl = null;
         $this->logger = $logger;
+        $this->securityContext = $securityContext;
     }
 
     /**
@@ -153,11 +157,24 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
             ->addCurlOption(CURLOPT_USERAGENT, self::USER_AGENT_NAME)
         ;
 
+        // API token.
         if($this->hasSecurityToken()) {
             $this->addCurlOption(CURLOPT_HTTPHEADER, array(sprintf(
                 'X-API-Security-Token: %s',
                 $this->getSecurityToken()
             )));
+        }
+
+        // Access token (oauth).
+        if (($token = $this->securityContext->getToken())) {
+            $class = new \ReflectionClass($token);
+
+            if ($class->hasMethod('getAccessToken')) {
+                $this->addCurlOption(CURLOPT_HTTPHEADER, array(sprintf(
+                    'Authorization: %s',
+                    $token->getAccessToken()
+                )));
+            }
         }
 
         return $this;
