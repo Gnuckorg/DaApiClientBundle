@@ -26,7 +26,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
 
     protected $cUrl;
     protected $logger;
-    protected $securityContext;
+    protected $container;
 
     /**
      * Constructor.
@@ -35,10 +35,33 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     {
         $this->cUrl = null;
         $this->logger = $logger;
+        // Use container to remove annoying circular dependencies.
+        $this->container = $container;
+    }
+
+    /**
+     * Get the access token if it exist or null otherwise.
+     *
+     * @return string|null The access token.
+     */
+    protected function getAccessToken()
+    {
+        $accessToken = null;
+
+        // Use container to remove annoying circular dependencies.
         if ($container->has('security.context')) {
             $this->securityContext = $container->get('security.context');
+            if (($token = $this->securityContext->getToken())) {
+                $class = new \ReflectionClass($token);
+
+                if ($class->hasMethod('getAccessToken')) {
+                    $accessToken = $token->getAccessToken();
+                }
+            }
         }
-    }
+
+        return $accessToken;
+    } 
 
     /**
      * Get Logger
@@ -168,15 +191,12 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
         }
 
         // Access token (oauth).
-        if ($this->securityContext && ($token = $this->securityContext->getToken())) {
-            $class = new \ReflectionClass($token);
-
-            if ($class->hasMethod('getAccessToken')) {
-                $this->addCurlOption(CURLOPT_HTTPHEADER, array(sprintf(
-                    'Authorization: %s',
-                    $token->getAccessToken()
-                )));
-            }
+        $accessToken = $this->getAccessToken();
+        if ($accessToken) {
+            $this->addCurlOption(CURLOPT_HTTPHEADER, array(sprintf(
+                'Authorization: %s',
+                $accessToken
+            )));
         }
 
         return $this;
