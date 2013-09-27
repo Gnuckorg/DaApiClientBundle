@@ -11,7 +11,7 @@
 
 namespace Da\ApiClientBundle\HttpClient;
 
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Da\ApiClientBundle\Logging\RestLoggerInterface;
 use Da\ApiClientBundle\Exception\ApiHttpResponseException;
 
@@ -31,11 +31,11 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * Constructor.
      */
-    public function __construct(RestLoggerInterface $logger, SecurityContextInterface $securityContext)
+    public function __construct(RestLoggerInterface $logger, ContainerInterface $container)
     {
         $this->cUrl = null;
         $this->logger = $logger;
-        $this->securityContext = $securityContext;
+        $this->securityContext = $container->get('security.context');
     }
 
     /**

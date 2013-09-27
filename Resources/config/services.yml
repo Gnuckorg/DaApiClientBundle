@@ -12,7 +12,7 @@ services:
 
     da_api_client.api_implementor:
         class:     %da_api_client.api_implementor.class%
-        arguments: [@da_api_client.rest_logger, @security.context]
+        arguments: [@da_api_client.rest_logger, @service_container]
         abstract:  true
         public:    false
 
