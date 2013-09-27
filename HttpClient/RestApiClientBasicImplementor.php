@@ -35,7 +35,9 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     {
         $this->cUrl = null;
         $this->logger = $logger;
-        $this->securityContext = $container->get('security.context');
+        if ($container->has('security.context')) {
+            $this->securityContext = $container->get('security.context');
+        }
     }
 
     /**
@@ -166,7 +168,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
         }
 
         // Access token (oauth).
-        if (($token = $this->securityContext->getToken())) {
+        if ($this->securityContext && ($token = $this->securityContext->getToken())) {
             $class = new \ReflectionClass($token);
 
             if ($class->hasMethod('getAccessToken')) {
