@@ -49,9 +49,9 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
         $accessToken = null;
 
         // Use container to remove annoying circular dependencies.
-        if ($container->has('security.context')) {
-            $this->securityContext = $container->get('security.context');
-            if (($token = $this->securityContext->getToken())) {
+        if ($this->container->has('security.context')) {
+            $securityContext = $this->container->get('security.context');
+            if (($token = $securityContext->getToken())) {
                 $class = new \ReflectionClass($token);
 
                 if ($class->hasMethod('getAccessToken')) {
