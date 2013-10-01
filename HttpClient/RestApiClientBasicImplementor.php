@@ -194,7 +194,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
         $accessToken = $this->getAccessToken();
         if ($accessToken) {
             $this->addCurlOption(CURLOPT_HTTPHEADER, array(sprintf(
-                'Authorization: %s',
+                'Authorization: Bearer %s',
                 $accessToken
             )));
         }
