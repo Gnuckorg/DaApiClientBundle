@@ -25,15 +25,17 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     const USER_AGENT_NAME = "RestApiClientBasic php/curl/REST-UA";
 
     protected $cUrl;
+    protected $headers;
     protected $logger;
     protected $container;
 
     /**
      * Constructor.
      */
-    public function __construct(RestLoggerInterface $logger, ContainerInterface $container)
+    public function __construct(RestLoggerInterface $logger, ContainerInterface $container) 
     {
         $this->cUrl = null;
+        $this->headers = array();
         $this->logger = $logger;
         // Use container to remove annoying circular dependencies.
         $this->container = $container;
@@ -128,11 +130,12 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function put($path, array $queryString = array())
     {
+        $this->addHeader();
         return $this
             ->initCurl($path)
             ->addCurlOption(CURLOPT_POST, true)
-            ->addCurlOption(CURLOPT_CUSTOMREQUEST, "PUT")
-            ->addCurlOption(CURLOPT_HTTPHEADER, array('X-HTTP-Method-Override: PUT'))
+            ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'PUT')
+            ->setHeader('X-HTTP-Method-Override', 'PUT')
             ->addCurlOption(CURLOPT_POSTFIELDS, http_build_query($queryString))
             ->execute($queryString, 'PUT')
         ;
@@ -146,8 +149,8 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
         return $this
             ->initCurl($path)
             ->addCurlOption(CURLOPT_POST, true)
-            ->addCurlOption(CURLOPT_CUSTOMREQUEST, "DELETE")
-            ->addCurlOption(CURLOPT_HTTPHEADER, array('X-HTTP-Method-Override: DELETE'))
+            ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'DELETE')
+            ->setHeader('X-HTTP-Method-Override', 'DELETE')
             ->addCurlOption(CURLOPT_POSTFIELDS, http_build_query($queryString))
             ->execute($queryString, 'DELETE')
         ;
@@ -171,35 +174,65 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      * Init cUrl
      *
      * @param string $path
+     *
      * @return RestApiClientBasicImplementor
      */
     protected function initCurl($path)
     {
         $this->cUrl = curl_init();
+        $this->headers = array();
         $this
             ->addCurlOption(CURLOPT_URL, $this->getApiEndpointPath($path))
             ->addCurlOption(CURLOPT_RETURNTRANSFER, true)
             ->addCurlOption(CURLOPT_USERAGENT, self::USER_AGENT_NAME)
         ;
 
+        return $this;
+    }
+
+    /**
+     * Set a header
+     *
+     * @param string $name
+     * @param string $value
+     *
+     * @return RestApiClientBasicImplementor
+     */
+    protected function setHeader($name, $value)
+    {
+        $this->headers[$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Add the headers of the request
+     */
+    protected function addHeaders()
+    {
+        $headers = array();
+        foreach ($this->headers as $name => $value) {
+            $headers[] = sprintf('%s: %s', $name, $value);
+        }
+
+        $this->addCurlOption(CURLOPT_HTTPHEADER, $headers);
+    }
+
+    /**
+     * Add the security tokens
+     */
+    protected function addSecurityTokens()
+    {
         // API token.
         if($this->hasSecurityToken()) {
-            $this->addCurlOption(CURLOPT_HTTPHEADER, array(sprintf(
-                'X-API-Security-Token: %s',
-                $this->getSecurityToken()
-            )));
+            $this->setHeader('X-API-Security-Token', $this->getSecurityToken());
         }
 
         // Access token (oauth).
         $accessToken = $this->getAccessToken();
         if ($accessToken) {
-            $this->addCurlOption(CURLOPT_HTTPHEADER, array(sprintf(
-                'Authorization: Bearer %s',
-                $accessToken
-            )));
+            $this->setHeader('Authorization', sprintf('Bearer %s', $accessToken));
         }
-
-        return $this;
     }
 
     /**
@@ -217,7 +250,8 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     }
 
     /**
-     * Execute cUrl
+     * Execute cUrl once and try to refresh authorization for a second try
+     * if the response is a 401
      *
      * @param array  $queryString
      * @param string $method
@@ -228,6 +262,36 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     protected function execute(array $queryString = array(), $method = null)
     {
+        try {
+            $httpContent = $this->tryExecution($queryString, $method);
+        }
+        catch (ApiHttpResponseException $exception) {
+            if (401 === $exception->getStatusCode() && $this->authorizationRefresher) {
+                $this->authorizationRefresher->refresh();
+                $httpContent = $this->tryExecution($queryString, $method);
+            } else {
+                throw $exception;
+            }
+        }
+
+        return $httpContent;
+    }
+
+    /**
+     * Execute cUrl
+     *
+     * @param array  $queryString
+     * @param string $method
+     *
+     * @return string
+     *
+     * @throw ApiHttpResponseException
+     */
+    protected function tryExecution(array $queryString = array(), $method = null)
+    {
+        $this->addSecurityTokens();
+        $this->addHeaders();
+
         $this->getLogger()->startQuery(
             curl_getinfo($this->cUrl, CURLINFO_EFFECTIVE_URL),
             $method,
@@ -242,7 +306,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
 
         $this->getLogger()->stopQuery($httpCode, $httpContent);
 
-        if($httpCode >= 400) {
+        if ($httpCode >= 400) {
             throw new ApiHttpResponseException($path, $httpCode, $httpContent);
         }
 

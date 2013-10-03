@@ -11,6 +11,8 @@
 
 namespace Da\ApiClientBundle\HttpClient;
 
+use Da\AuthCommonBundle\Security\AuthorizationRefresherInterface;
+
 /**
  * RestApiClientImplementorInterface is the interface that an RestApiClientImplementor
  * should implement to be used as an implementor by the RestApiClientBridge.
@@ -24,6 +26,7 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
      * Set the endpoint root URL of the API (from which all the path will be relative to).
      *
      * @param string $endpointRoot The api endpoint root URL.
+     *
      * @return RestApiClientImplementorInterface.
      */
     public function setEndpointRoot($endpointRoot);
@@ -39,6 +42,7 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
      * Set the security token to authenticate your client in the API.
      *
      * @param string $securityToken The security token.
+     *
      * @return RestApiClientImplementorInterface.
      */
     public function setSecurityToken($securityToken);
@@ -54,14 +58,24 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
      * Enable or disable the cache.
      *
      * @param bool $enableCache Should enable the cache or not
+     *
      * @return RestApiClientImplementorInterface.
      */
     public function enableCache($enableCache);
 
     /**
-     * Informe about the cache activation.
+     * Inform about the cache activation.
      *
-     * @return bool true if the cache is enabled.
+     * @return bool True if the cache is enabled.
      */
     public function isCacheEnabled();
+
+    /**
+     * Set the authorization refresher.
+     *
+     * @param AuthorizationRefresherInterface $authorizationRefresher The authorization refresher.
+     *
+     * @return RestApiClientImplementorInterface.
+     */
+    public function setAuthorizationRefresher(AuthorizationRefresherInterface $authorizationRefresher = null);
 }

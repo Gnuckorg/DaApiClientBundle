@@ -11,12 +11,17 @@
 
 namespace Da\ApiClientBundle\Exception;
 
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
+ * @author Thomas Prelot <tprelot@gmail.com>
  */
-class ApiHttpResponseException extends \Exception
+class ApiHttpResponseException extends \RuntimeException implements HttpExceptionInterface
 {
     protected $httpCode;
+    protected $headers;
+    protected $jsonMessage;
 
     /**
      * Constructor
@@ -25,16 +30,36 @@ class ApiHttpResponseException extends \Exception
      * @param string $httpCode
      * @param string $content
      */
-    public function __construct($url, $httpCode, $content)
+    public function __construct($url, $httpCode, $content, $headers = array())
     {
-        $this->setHttpCode($httpCode);
+        $this->httpCode = $httpCode;
+        $this->headers = $headers;
+        $stringContent = $content;
+
+        try {
+            $content = json_decode($content);
+        }
+        catch (\Exception $e) {
+        }
+
+        $this->jsonMessage = json_encode(
+            array(
+                'message' => sprintf(
+                    'The API \'%s\' returned an error.',
+                    $url
+                ),
+                'http_code' => $httpCode,
+                'error' => $content
+            ),
+            JSON_UNESCAPED_SLASHES + JSON_UNESCAPED_UNICODE + JSON_PRETTY_PRINT
+        );
 
         parent::__construct(
             sprintf(
                 "%s\nApi response error code: %d\n%s",
                 $url,
                 $httpCode,
-                $content
+                $stringContent
             ),
             0,
             null
@@ -42,22 +67,38 @@ class ApiHttpResponseException extends \Exception
     }
 
     /**
-     * Set Http Code
+     * Get the HTTP Code.
      *
-     * @param integer $code
-     */
-    public function setHttpCode($code)
-    {
-        $this->httpCode = $code;
-    }
-
-    /**
-     * Get Http Code
-     *
-     * @return integer
+     * @return integer The code.
      */
     public function getHttpCode()
     {
         return $this->httpCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStatusCode()
+    {
+        return $this->getHttpCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    /**
+     * Get the message in a json format.
+     *
+     * @return string The json message.
+     */
+    public function getJsonMessage()
+    {
+        return $this->jsonMessage;
     }
 }

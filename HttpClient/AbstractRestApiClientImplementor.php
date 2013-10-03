@@ -11,6 +11,8 @@
 
 namespace Da\ApiClientBundle\HttpClient;
 
+use Da\AuthCommonBundle\Security\AuthorizationRefresherInterface;
+
 /**
  * AbstractRestApiClientImplementor is an abstract class helping to 
  * define your own implementor with a basic implementation for some methods
@@ -41,6 +43,13 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
      * @var boolean
      */
     protected $cacheEnabled = true;
+
+    /**
+     * The authorization refresher.
+     *
+     * @var AuthorizationRefresherInterface
+     */
+    protected $authorizationRefresher;
 
     /**
      * {@inheritdoc}
@@ -94,6 +103,16 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     public function isCacheEnabled()
     {
         return $this->cacheEnabled;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAuthorizationRefresher(AuthorizationRefresherInterface $authorizationRefresher = null)
+    {
+        $this->authorizationRefresher = $authorizationRefresher;
+
+        return $this;
     }
 
     /**

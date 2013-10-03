@@ -35,11 +35,13 @@ class DaApiClientExtension extends Extension
             $implementorDefinition->isPublic(false);
             $implementorId = sprintf('da_api_client.api_implementor.%s', $apiName);
             $container->setDefinition($implementorId, $implementorDefinition);
+            $implementorDefinition->addTag('da_api_client.api_implementor');
 
             $serviceDefinition = new DefinitionDecorator($service);
             $serviceDefinition->isAbstract(false);
             $serviceDefinition->replaceArgument(0, new Reference($implementorId));
             $serviceDefinition->replaceArgument(1, $apiConfiguration);
+            $serviceDefinition->addTag('da_api_client.api');
             $container->setDefinition(
                 sprintf('da_api_client.api.%s', $apiName),
                 $serviceDefinition
