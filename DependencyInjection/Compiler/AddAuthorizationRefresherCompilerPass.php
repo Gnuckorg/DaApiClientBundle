@@ -37,10 +37,10 @@ class AddAuthorizationRefresherCompilerPass implements CompilerPassInterface
             $definition = $container->getDefinition($id);
 
            	// If the DaOAuthClientBundle is loaded, use its authorization refresher.
-            if ($container->hasDefinition('da_oauth_client.authorization_refresher')) {
+            if ($container->hasDefinition('da_oauth_client.authorization_refresher.oauth')) {
                 $definition->addMethodCall(
                 	'setAuthorizationRefresher', 
-                	new Reference('da_oauth_client.authorization_refresher')
+                	new Reference('da_oauth_client.authorization_refresher.oauth')
                 );
             }
         }
