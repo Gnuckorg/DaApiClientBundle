@@ -16,7 +16,7 @@ class ExceptionListener
     {
         $exception =  $event->getException();
 
-        if ($exception instanceof HttpExceptionInterface) {
+        if ($exception instanceof ApiHttpResponseException) {// HttpExceptionInterface) {
             $response = new Response();
 
             $response->setStatusCode($exception->getStatusCode());
@@ -31,6 +31,7 @@ class ExceptionListener
                 }
                 catch (\Exception $e) {
                 }
+                
                 $content = json_encode(
                     array(
                         'message' => 'The server returned an error.',

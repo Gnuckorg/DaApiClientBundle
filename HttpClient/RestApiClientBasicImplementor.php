@@ -12,6 +12,7 @@
 namespace Da\ApiClientBundle\HttpClient;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Da\ApiClientBundle\Logging\RestLoggerInterface;
 use Da\ApiClientBundle\Exception\ApiHttpResponseException;
 
@@ -207,15 +208,17 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
 
     /**
      * Add the headers of the request
+     *
+     * @param resource $cUrl
      */
-    protected function addHeaders()
+    protected function addHeaders($cUrl)
     {
         $headers = array();
         foreach ($this->headers as $name => $value) {
             $headers[] = sprintf('%s: %s', $name, $value);
         }
 
-        $this->addCurlOption(CURLOPT_HTTPHEADER, $headers);
+        $this->addCurlOption(CURLOPT_HTTPHEADER, $headers, $cUrl);
     }
 
     /**
@@ -240,11 +243,16 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      *
      * @param string $key
      * @param mixed $value 
+     * @param resource $cUrl
+     *
      * @return RestApiClientBasicImplementor
      */
-    protected function addCurlOption($key, $value)
+    protected function addCurlOption($key, $value, $cUrl = null)
     {
-        curl_setopt($this->cUrl, $key, $value);
+        if (!$cUrl) {
+            $cUrl = $this->cUrl;
+        }
+        curl_setopt($cUrl, $key, $value);
 
         return $this;
     }
@@ -262,16 +270,47 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     protected function execute(array $queryString = array(), $method = null)
     {
+        $httpContent = '';
+        $cUrl = null;
+
         try {
-            $httpContent = $this->tryExecution($queryString, $method);
-        }
-        catch (ApiHttpResponseException $exception) {
-            if (401 === $exception->getStatusCode() && $this->authorizationRefresher) {
-                $this->authorizationRefresher->refresh();
-                $httpContent = $this->tryExecution($queryString, $method);
-            } else {
-                throw $exception;
+            try {
+                $cUrl = curl_copy_handle($this->cUrl);
+                $httpContent = $this->tryExecution($this->cUrl, $queryString, $method);
+            } catch (ApiHttpResponseException $exception) {
+                if (401 === $exception->getStatusCode() && $this->authorizationRefresher) {
+                    try {
+                        $this->authorizationRefresher->refresh();
+                    } catch (AuthenticationException $e) {
+                        throw $exception;
+                    }
+
+                    try {
+                        $httpContent = $this->tryExecution($cUrl, $queryString, $method);
+                    } catch (ApiHttpResponseException $e) {
+                        throw $e;
+                    }
+                } else {
+                    throw $exception;
+                }
             }
+        }
+        catch (\Exception $e) {
+            if (is_resource($cUrl)) {
+                curl_close($cUrl);
+            }
+            if (is_resource($this->cUrl)) {
+                curl_close($this->cUrl);
+            }
+
+            throw $e;
+        }
+
+        if (is_resource($cUrl)) {
+            curl_close($cUrl);
+        }
+        if (is_resource($this->cUrl)) {
+            curl_close($this->cUrl);
         }
 
         return $httpContent;
@@ -280,29 +319,29 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * Execute cUrl
      *
-     * @param array  $queryString
-     * @param string $method
+     * @param resource $cUrl
+     * @param array    $queryString
+     * @param string   $method
      *
      * @return string
      *
      * @throw ApiHttpResponseException
      */
-    protected function tryExecution(array $queryString = array(), $method = null)
+    protected function tryExecution($cUrl, array $queryString = array(), $method = null)
     {
         $this->addSecurityTokens();
-        $this->addHeaders();
+        $this->addHeaders($cUrl);
 
         $this->getLogger()->startQuery(
-            curl_getinfo($this->cUrl, CURLINFO_EFFECTIVE_URL),
+            curl_getinfo($cUrl, CURLINFO_EFFECTIVE_URL),
             $method,
             $queryString
         );
 
-        $httpContent = curl_exec($this->cUrl);
+        $httpContent = curl_exec($cUrl);
 
-        $path = curl_getinfo($this->cUrl, CURLINFO_EFFECTIVE_URL);
-        $httpCode = curl_getinfo($this->cUrl, CURLINFO_HTTP_CODE);
-        curl_close($this->cUrl);
+        $path = curl_getinfo($cUrl, CURLINFO_EFFECTIVE_URL);
+        $httpCode = curl_getinfo($cUrl, CURLINFO_HTTP_CODE);
 
         $this->getLogger()->stopQuery($httpCode, $httpContent);
 

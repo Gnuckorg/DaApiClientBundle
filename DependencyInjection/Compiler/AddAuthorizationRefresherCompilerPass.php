@@ -40,7 +40,7 @@ class AddAuthorizationRefresherCompilerPass implements CompilerPassInterface
             if ($container->hasDefinition('da_oauth_client.authorization_refresher.oauth')) {
                 $definition->addMethodCall(
                 	'setAuthorizationRefresher', 
-                	new Reference('da_oauth_client.authorization_refresher.oauth')
+                	array(new Reference('da_oauth_client.authorization_refresher.oauth'))
                 );
             }
         }
