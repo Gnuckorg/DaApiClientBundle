@@ -14,7 +14,7 @@ namespace Da\ApiClientBundle\HttpClient;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Da\ApiClientBundle\Logging\RestLoggerInterface;
-use Da\ApiClientBundle\Exception\ApiHttpResponseException;
+use Da\AuthCommonBundle\Exception\ApiHttpResponseException;
 
 /**
  * RestApiClientBasicImplementor is a basic implementation for a REST API client.
@@ -29,6 +29,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     protected $headers;
     protected $logger;
     protected $container;
+    protected $isFirstTry;
 
     /**
      * Constructor.
@@ -37,6 +38,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     {
         $this->cUrl = null;
         $this->headers = array();
+        $this->isFirstTry = true;
         $this->logger = $logger;
         // Use container to remove annoying circular dependencies.
         $this->container = $container;
@@ -258,8 +260,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     }
 
     /**
-     * Execute cUrl once and try to refresh authorization for a second try
-     * if the response is a 401
+     * Execute cUrl
      *
      * @param array  $queryString
      * @param string $method
@@ -271,34 +272,18 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     protected function execute(array $queryString = array(), $method = null)
     {
         $httpContent = '';
-        $cUrl = null;
 
         try {
             try {
-                $cUrl = curl_copy_handle($this->cUrl);
                 $httpContent = $this->tryExecution($this->cUrl, $queryString, $method);
             } catch (ApiHttpResponseException $exception) {
-                if (401 === $exception->getStatusCode() && $this->authorizationRefresher) {
-                    try {
-                        $this->authorizationRefresher->refresh();
-                    } catch (AuthenticationException $e) {
-                        throw $exception;
-                    }
+                $exception->setFirstTry($this->isFirstTry);
+                
+                throw $exception;
+            }
+        } catch (\Exception $e) {
+            $this->isFirstTry = false;
 
-                    try {
-                        $httpContent = $this->tryExecution($cUrl, $queryString, $method);
-                    } catch (ApiHttpResponseException $e) {
-                        throw $e;
-                    }
-                } else {
-                    throw $exception;
-                }
-            }
-        }
-        catch (\Exception $e) {
-            if (is_resource($cUrl)) {
-                curl_close($cUrl);
-            }
             if (is_resource($this->cUrl)) {
                 curl_close($this->cUrl);
             }
@@ -306,9 +291,6 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
             throw $e;
         }
 
-        if (is_resource($cUrl)) {
-            curl_close($cUrl);
-        }
         if (is_resource($this->cUrl)) {
             curl_close($this->cUrl);
         }

@@ -69,13 +69,4 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
      * @return bool True if the cache is enabled.
      */
     public function isCacheEnabled();
-
-    /**
-     * Set the authorization refresher.
-     *
-     * @param AuthorizationRefresherInterface $authorizationRefresher The authorization refresher.
-     *
-     * @return RestApiClientImplementorInterface.
-     */
-    public function setAuthorizationRefresher(AuthorizationRefresherInterface $authorizationRefresher = null);
 }

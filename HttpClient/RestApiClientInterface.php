@@ -35,7 +35,7 @@ interface RestApiClientInterface
      *
      * @return string
      *
-     * @throw ApiHttpResponseException
+     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
     public function get($path, array $queryString = array());
 
@@ -47,7 +47,7 @@ interface RestApiClientInterface
      *
      * @return string
      *
-     * @throw ApiHttpResponseException
+     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
     public function post($path, array $queryString = array());
 
@@ -59,7 +59,7 @@ interface RestApiClientInterface
      *
      * @return string
      *
-     * @throw ApiHttpResponseException
+     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
     public function put($path, array $queryString = array());
 
@@ -71,7 +71,7 @@ interface RestApiClientInterface
      *
      * @return string
      *
-     * @throw ApiHttpResponseException
+     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
     public function delete($path, array $queryString = array());
 }

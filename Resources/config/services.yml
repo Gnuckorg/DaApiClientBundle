@@ -3,7 +3,6 @@ parameters:
     da_api_client.api_implementor.class:          Da\ApiClientBundle\HttpClient\RestApiClientBasicImplementor
     da_api_client.rest_logger.class:              Da\ApiClientBundle\Logging\DebugStack
     da_api_client.data_collector.class:           Da\ApiClientBundle\DataCollector\RestApiClientDataCollector
-    da_api_client.event.exception_listener.class: Da\ApiClientBundle\Event\ExceptionListener
 
 services:
     da_api_client.api:
@@ -27,8 +26,3 @@ services:
         public:    false
         tags:
             - { name: data_collector, template: 'DaApiClientBundle:Collector:rest', id: rest_api }
-
-    da_api_client.event.exception_listener:
-        class: %da_api_client.event.exception_listener.class%
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
