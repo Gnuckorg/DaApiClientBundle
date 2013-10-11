@@ -19,6 +19,7 @@ Add the bundle in the composer.json file:
 
 "require": {
     // ...
+    "da/auth-common-bundle": "dev-master",
     "da/api-client-bundle": "dev-master"
 },
 ```
@@ -68,8 +69,8 @@ try {
     $api = $container->get('da_api_client.api.my_api_name')
     $parameters = array('offset' => 0, 'limit' => 20);
     $friends = $api->get('/friends', $parameters);
-} catch (ApiCallException $e) {
-    switch ($e->getHttpCode()) {
+} catch (\Da\AuthCommonBundle\Exception\ApiHttpResponseException $e) {
+    switch ($e->getStatusCode()) {
         // Handle specific http error code here.
         case '404':
             // ...

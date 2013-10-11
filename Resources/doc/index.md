@@ -7,5 +7,5 @@ Sections
 --------
 
 - [Use your own API Client](api_client.md)
-- [HTTP Status Object and Exceptions](http_status_object.md)
+- [Exceptions](exceptions.md)
 - [Configuration Reference](configuration_reference.md)
