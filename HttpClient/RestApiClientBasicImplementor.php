@@ -133,7 +133,6 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function put($path, array $queryString = array())
     {
-        $this->addHeader();
         return $this
             ->initCurl($path)
             ->addCurlOption(CURLOPT_POST, true)
