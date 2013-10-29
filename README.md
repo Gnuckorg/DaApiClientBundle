@@ -55,9 +55,9 @@ Configuration to use your API
 da_api_client:
     api:
         my_api_name:
-            base_url:      'https://my-domain/api'
-            api_token:     3e90o0xrzy4gsw4k0440sw4k4g8oog0ckoo4okgogs0wowo4sg
-            cache_enabled: true
+            endpoint_root:  https://my-domain/api
+            security_token: 3e90o0xrzy4gsw4k0440sw4k4g8oog0ckoo4okgogs0wowo4sg
+            cache_enabled:  true
 ```
 
 
