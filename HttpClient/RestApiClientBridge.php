@@ -25,8 +25,8 @@ class RestApiClientBridge implements RestApiClientInterface
      *
      * @var RestApiClientImplementorInterface
      */
-    private $implementor;
-    
+    protected $implementor;
+
     /**
      * Constructor.
      *

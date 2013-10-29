@@ -27,7 +27,7 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
      * @var string
      */
     protected $endpointRoot;
-    
+
     /**
      * The security token.
      *
