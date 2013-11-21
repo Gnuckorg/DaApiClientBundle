@@ -32,11 +32,11 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
     public function setEndpointRoot($endpointRoot);
 
     /**
-     * Get the endpoint root URL of the API (from which all the path will be relative to).
+     * Get the security token to authenticate your client in the API.
      *
-     * @return string The api endpoint root URL.
+     * @return string The security token.
      */
-    public function getEndpointRoot();
+    public function getSecurityToken();
 
     /**
      * Set the security token to authenticate your client in the API.
@@ -48,11 +48,11 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
     public function setSecurityToken($securityToken);
 
     /**
-     * Get the security token to authenticate your client in the API.
+     * Inform about the cache activation.
      *
-     * @return string The security token.
+     * @return bool True if the cache is enabled.
      */
-    public function getSecurityToken();
+    public function isCacheEnabled();
 
     /**
      * Enable or disable the cache.
@@ -62,11 +62,4 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
      * @return RestApiClientImplementorInterface.
      */
     public function enableCache($enableCache);
-
-    /**
-     * Inform about the cache activation.
-     *
-     * @return bool True if the cache is enabled.
-     */
-    public function isCacheEnabled();
 }
