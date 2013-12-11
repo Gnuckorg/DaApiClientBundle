@@ -105,7 +105,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function get($path, array $queryString = array(), $headers = array())
+    public function get($path, array $queryString = array(), array $headers = array())
     {
         $path = self::addQueryString($path, $queryString);
 
@@ -119,7 +119,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function post($path, array $queryString = array(), $headers = array())
+    public function post($path, array $queryString = array(), array $headers = array())
     {
         return $this
             ->initCurl($path)
@@ -133,7 +133,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function put($path, array $queryString = array(), $headers = array())
+    public function put($path, array $queryString = array(), array $headers = array())
     {
         return $this
             ->initCurl($path)
@@ -149,7 +149,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function delete($path, array $queryString = array(), $headers = array())
+    public function delete($path, array $queryString = array(), array $headers = array())
     {
         return $this
             ->initCurl($path)
