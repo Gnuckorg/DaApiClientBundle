@@ -30,48 +30,52 @@ interface RestApiClientInterface
     /**
      * Get
      *
-     * @param string $path       The relative path to the webservice.
-     * @param array $queryString The specific queryString to the webservice.
+     * @param string $path        The relative path to the webservice.
+     * @param array  $queryString The specific queryString to the webservice.
+     * @param array  $headers     The optionnal headers.
      *
      * @return string
      *
      * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
-    public function get($path, array $queryString = array());
+    public function get($path, array $queryString = array(), $headers = array());
 
     /**
      * Post
      *
      * @param string $path       The relative path to the webservice.
      * @param array $queryString The specific queryString to the webservice.
+     * @param array  $headers     The optionnal headers.
      *
      * @return string
      *
      * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
-    public function post($path, array $queryString = array());
+    public function post($path, array $queryString = array(), $headers = array());
 
     /**
      * Put
      *
      * @param string $path       The relative path to the webservice.
      * @param array $queryString The specific queryString to the webservice.
+     * @param array  $headers     The optionnal headers.
      *
      * @return string
      *
      * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
-    public function put($path, array $queryString = array());
+    public function put($path, array $queryString = array(), $headers = array());
 
     /**
      * Delete
      *
      * @param string $path       The relative path to the webservice.
      * @param array $queryString The specific queryString to the webservice.
+     * @param array  $headers     The optionnal headers.
      *
      * @return string
      *
      * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
-    public function delete($path, array $queryString = array());
+    public function delete($path, array $queryString = array(), $headers = array());
 }

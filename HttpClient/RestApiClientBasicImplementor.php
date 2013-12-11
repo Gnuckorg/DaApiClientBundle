@@ -105,12 +105,13 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function get($path, array $queryString = array())
+    public function get($path, array $queryString = array(), $headers = array())
     {
         $path = self::addQueryString($path, $queryString);
 
         return $this
             ->initCurl($path)
+            ->initHeaders($headers)
             ->execute($queryString, 'GET')
         ;
     }
@@ -118,10 +119,11 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function post($path, array $queryString = array())
+    public function post($path, array $queryString = array(), $headers = array())
     {
         return $this
             ->initCurl($path)
+            ->initHeaders($headers)
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_POSTFIELDS, $queryString)
             ->execute($queryString, 'POST')
@@ -131,10 +133,11 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function put($path, array $queryString = array())
+    public function put($path, array $queryString = array(), $headers = array())
     {
         return $this
             ->initCurl($path)
+            ->initHeaders($headers)
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'PUT')
             ->setHeader('X-HTTP-Method-Override', 'PUT')
@@ -146,10 +149,11 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function delete($path, array $queryString = array())
+    public function delete($path, array $queryString = array(), $headers = array())
     {
         return $this
             ->initCurl($path)
+            ->initHeaders($headers)
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'DELETE')
             ->setHeader('X-HTTP-Method-Override', 'DELETE')
@@ -182,12 +186,29 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     protected function initCurl($path)
     {
         $this->cUrl = curl_init();
-        $this->headers = array();
         $this
             ->addCurlOption(CURLOPT_URL, $this->getApiEndpointPath($path))
             ->addCurlOption(CURLOPT_RETURNTRANSFER, true)
             ->addCurlOption(CURLOPT_USERAGENT, self::USER_AGENT_NAME)
         ;
+
+        return $this;
+    }
+
+    /**
+     * Init the headers
+     *
+     * @param array $headers
+     *
+     * @return RestApiClientBasicImplementor
+     */
+    protected function initHeaders(array $headers)
+    {
+        $this->headers = array();
+        
+        foreach ($headers as $name => $value) {
+            $this->setHeader($name, $value);
+        }
 
         return $this;
     }

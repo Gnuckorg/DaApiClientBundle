@@ -52,32 +52,32 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
-    public function get($path, array $queryString = array())
+    public function get($path, array $queryString = array(), $headers = array())
     {
-        return $this->implementor->get($path, $queryString);
+        return $this->implementor->get($path, $queryString, $headers);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function post($path, array $queryString = array())
+    public function post($path, array $queryString = array(), $headers = array())
     {
-        return $this->implementor->post($path, $queryString);
+        return $this->implementor->post($path, $queryString, $headers);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function put($path, array $queryString = array())
+    public function put($path, array $queryString = array(), $headers = array())
     {
-        return $this->implementor->put($path, $queryString);
+        return $this->implementor->put($path, $queryString, $headers);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function delete($path, array $queryString = array())
+    public function delete($path, array $queryString = array(), $headers = array())
     {
-        return $this->implementor->delete($path, $queryString);
+        return $this->implementor->delete($path, $queryString, $headers);
     }
 }
