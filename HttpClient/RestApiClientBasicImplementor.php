@@ -34,7 +34,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * Constructor.
      */
-    public function __construct(RestLoggerInterface $logger, ContainerInterface $container) 
+    public function __construct(RestLoggerInterface $logger, ContainerInterface $container)
     {
         $this->cUrl = null;
         $this->headers = array();
@@ -66,7 +66,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
         }
 
         return $accessToken;
-    } 
+    }
 
     /**
      * Get Logger
@@ -163,6 +163,42 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function link($path, array $links, array $headers = array())
+    {
+        $curl = $this
+            ->initCurl($path)
+            ->initHeaders($headers)
+        ;
+
+        return $curl
+            ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'LINK')
+            ->setHeader('X-HTTP-Method-Override', 'LINK')
+            ->setHeader('Link', implode(', ', $links))
+            ->execute(array(), 'LINK')
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unlink($path, array $links, array $headers = array())
+    {
+        $curl = $this
+            ->initCurl($path)
+            ->initHeaders($headers)
+        ;
+
+        return $curl
+            ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'UNLINK')
+            ->setHeader('X-HTTP-Method-Override', 'UNLINK')
+            ->setHeader('Link', implode(', ', $links))
+            ->execute(array(), 'UNLINK')
+        ;
+    }
+
+    /**
      * Get the api endpoint path
      *
      * @param string $path
@@ -205,7 +241,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     protected function initHeaders(array $headers)
     {
         $this->headers = array();
-        
+
         foreach ($headers as $name => $value) {
             $this->setHeader($name, $value);
         }
@@ -264,7 +300,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      * Add cUrl option
      *
      * @param string $key
-     * @param mixed $value 
+     * @param mixed $value
      * @param resource $cUrl
      *
      * @return RestApiClientBasicImplementor
@@ -298,7 +334,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
                 $httpContent = $this->tryExecution($this->cUrl, $queryString, $method);
             } catch (ApiHttpResponseException $exception) {
                 $exception->setFirstTry($this->isFirstTry);
-                
+
                 throw $exception;
             }
         } catch (\Exception $e) {
