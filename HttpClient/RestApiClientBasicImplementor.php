@@ -241,7 +241,6 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     protected function initHeaders(array $headers)
     {
         $this->headers = array();
-
         foreach ($headers as $name => $value) {
             $this->setHeader($name, $value);
         }
@@ -334,7 +333,6 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
                 $httpContent = $this->tryExecution($this->cUrl, $queryString, $method);
             } catch (ApiHttpResponseException $exception) {
                 $exception->setFirstTry($this->isFirstTry);
-
                 throw $exception;
             }
         } catch (\Exception $e) {
