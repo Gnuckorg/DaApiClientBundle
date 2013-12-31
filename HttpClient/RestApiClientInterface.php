@@ -69,7 +69,7 @@ interface RestApiClientInterface
     /**
      * Delete
      *
-     * @param string $path       The relative path to the webservice.
+     * @param string $path        The relative path to the webservice.
      * @param array  $queryString The specific queryString to the webservice.
      * @param array  $headers     The optionnal headers.
      *
@@ -78,4 +78,30 @@ interface RestApiClientInterface
      * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
     public function delete($path, array $queryString = array(), array $headers = array());
+
+    /**
+     * Link
+     *
+     * @param string $path        The relative path to the webservice.
+     * @param array  $links       Array of resources to link.
+     * @param array  $headers     The optionnal headers.
+     *
+     * @return string
+     *
+     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
+     */
+    public function link($path, array $links, array $headers = array());
+
+    /**
+     * Unlink
+     *
+     * @param string $path        The relative path to the webservice.
+     * @param array  $links       Array of resources to unlink.
+     * @param array  $headers     The optionnal headers.
+     *
+     * @return string
+     *
+     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
+     */
+    public function unlink($path, array $links, array $headers = array());
 }

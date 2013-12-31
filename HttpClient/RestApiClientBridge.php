@@ -80,4 +80,20 @@ class RestApiClientBridge implements RestApiClientInterface
     {
         return $this->implementor->delete($path, $queryString, $headers);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function link($path, array $links, array $headers = array())
+    {
+        return $this->implementor->link($path, $links, $headers);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unlink($path, array $links, array $headers = array())
+    {
+        return $this->implementor->unlink($path, $links, $headers);
+    }
 }
