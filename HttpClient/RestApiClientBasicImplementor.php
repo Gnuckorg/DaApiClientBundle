@@ -29,12 +29,13 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     protected $headers;
     protected $logger;
     protected $container;
+    protected $environment;
     protected $isFirstTry;
 
     /**
      * Constructor.
      */
-    public function __construct(RestLoggerInterface $logger, ContainerInterface $container)
+    public function __construct(RestLoggerInterface $logger, ContainerInterface $container, $environment)
     {
         $this->cUrl = null;
         $this->headers = array();
@@ -42,6 +43,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
         $this->logger = $logger;
         // Use container to remove annoying circular dependencies.
         $this->container = $container;
+        $this->environment = $environment;
     }
 
     /**
@@ -368,18 +370,22 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
         $this->addSecurityTokens();
         $this->addHeaders($cUrl);
 
-        $this->getLogger()->startQuery(
-            curl_getinfo($cUrl, CURLINFO_EFFECTIVE_URL),
-            $method,
-            $queryString
-        );
+        if ('dev' === $this->environment) {
+            $this->getLogger()->startQuery(
+                curl_getinfo($cUrl, CURLINFO_EFFECTIVE_URL),
+                $method,
+                $queryString
+            );
+        }
 
         $httpContent = curl_exec($cUrl);
 
         $path = curl_getinfo($cUrl, CURLINFO_EFFECTIVE_URL);
         $httpCode = curl_getinfo($cUrl, CURLINFO_HTTP_CODE);
 
-        $this->getLogger()->stopQuery($httpCode, $httpContent);
+        if ('dev' === $this->environment) {
+            $this->getLogger()->stopQuery($httpCode, $httpContent);
+        }
 
         if ($httpCode >= 400) {
             throw new ApiHttpResponseException($path, $httpCode, $httpContent);
