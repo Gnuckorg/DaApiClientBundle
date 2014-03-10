@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Da\ApiClientBundle\HttpClient;
+namespace Da\ApiClientBundle\Http\ApiClient;
 
 /**
  * AbstractRestApiClientImplementor is an abstract class helping to 

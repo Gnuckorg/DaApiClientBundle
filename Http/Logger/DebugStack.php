@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Da\ApiClientBundle\Logging;
+namespace Da\ApiClientBundle\Http\Logger;
 
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>

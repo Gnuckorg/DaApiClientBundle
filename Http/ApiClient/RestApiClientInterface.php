@@ -9,11 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Da\ApiClientBundle\HttpClient;
+namespace Da\ApiClientBundle\Http\ApiClient;
 
 /**
- * RestApiClientImplementorInterface is the interface that an RestApiClientImplementor
- * should implement to be used as an implementor by the RestApiClientBridge.
+ * RestApiClientInterface
  *
  * @author Thomas Prelot
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>

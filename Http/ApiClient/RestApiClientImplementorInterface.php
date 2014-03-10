@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Da\ApiClientBundle\HttpClient;
+namespace Da\ApiClientBundle\Http\ApiClient;
 
 use Da\AuthCommonBundle\Security\AuthorizationRefresherInterface;
 
