@@ -11,6 +11,7 @@
 
 namespace Da\ApiClientBundle\Http\Transport;
 
+use Da\ApiClientBundle\Http\logger\RestLoggerInterface;
 use Da\ApiClientBundle\Http\Response;
 
 /**
@@ -27,7 +28,7 @@ class CurlTransport extends AbstractHttpTransport
     /**
      * {@inheritdoc}
      */
-    protected function __construct(RestLoggerInterface $logger = null)
+    public function __construct(RestLoggerInterface $logger = null)
     {
         parent::__construct();
 
@@ -59,12 +60,14 @@ class CurlTransport extends AbstractHttpTransport
      */
     protected function buildRequest()
     {
-        $buildRequestMethod = sprintf('build%sRequest', ucfirst(strtolower($this->getMethod)));
+        $buildRequestMethod = sprintf('build%sRequest', ucfirst(strtolower($this->getMethod())));
         $this
             ->addCurlOption(CURLOPT_URL, $this->getPath())
             ->buildHeaders()
             ->$buildRequestMethod()
         ;
+
+        return $this;
     }
 
     /**
@@ -177,53 +180,43 @@ class CurlTransport extends AbstractHttpTransport
      */
     public function executeRequest()
     {
-        $content = curl_exec($this->cUrl);
-        $url = curl_getinfo($cUrl, CURLINFO_EFFECTIVE_URL);
-        $code = curl_getinfo($cUrl, CURLINFO_HTTP_CODE);
-        die('DIPLAY HEADER NOW !');
-        $headers = array(); //TODO: retrieve response headers from curl !
+        $response = curl_exec($this->cUrl);
+        $url = curl_getinfo($this->cUrl, CURLINFO_EFFECTIVE_URL);
+        $code = curl_getinfo($this->cUrl, CURLINFO_HTTP_CODE);
+        $headerSize = curl_getinfo($this->cUrl, CURLINFO_HEADER_SIZE);
+        $header = substr($response, 0, $headerSize);
+        $body = substr($response, $headerSize);
         curl_close($this->cUrl);
 
-        return Reponse::create($content, $url, $code, $headers);
+        return Response::create($url, $body, $code, self::parseHeaders($header));
     }
 
     /**
-     * Execute cUrl
+     * Parse Headers
      *
-     * @param resource $cUrl
-     * @param array    $queryString
-     * @param string   $method
-     *
-     * @return string
-     *
-     * @throw ApiHttpResponseException
+     * @param string $raw
+     * @return array
      */
-    protected function tryExecution($cUrl, array $queryString = array(), $method = null)
+    public static function parseHeaders($raw)
     {
-        $this->addSecurityTokens();
-        $this->addHeaders($cUrl);
+        $headers = array(); // $headers = [];
 
-        if ('dev' === $this->environment) {
-            $this->getLogger()->startQuery(
-                curl_getinfo($cUrl, CURLINFO_EFFECTIVE_URL),
-                $method,
-                $queryString
-            );
+        foreach (explode("\n", $raw) as $i => $h) {
+            $h = explode(':', $h, 2);
+
+            if (isset($h[1])) {
+                if (!isset($headers[$h[0]])) {
+                    $headers[$h[0]] = trim($h[1]);
+                } elseif (is_array($headers[$h[0]])) {
+                    $tmp = array_merge($headers[$h[0]], array(trim($h[1])));
+                    $headers[$h[0]] = $tmp;
+                } else {
+                    $tmp = array_merge(array($headers[$h[0]]), array(trim($h[1])));
+                    $headers[$h[0]] = $tmp;
+                }
+            }
         }
 
-        $httpContent = curl_exec($cUrl);
-
-        $path = curl_getinfo($cUrl, CURLINFO_EFFECTIVE_URL);
-        $httpCode = curl_getinfo($cUrl, CURLINFO_HTTP_CODE);
-
-        if ('dev' === $this->environment) {
-            $this->getLogger()->stopQuery($httpCode, $httpContent);
-        }
-
-        if ($httpCode >= 400) {
-            throw new ApiHttpResponseException($path, $httpCode, $httpContent);
-        }
-
-        return $httpContent;
+        return $headers;
     }
 }

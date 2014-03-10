@@ -32,9 +32,17 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
     /**
      * {@inheritdoc}
      */
-    public __construct(RestLoggerInterface $logger = null)
+    public function __construct(RestLoggerInterface $logger = null)
     {
         $this->logger = $logger;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLogger()
+    {
+        return $this->logger;
     }
 
     /**
@@ -94,7 +102,17 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
      */
     public function setQueryStrings($queryStrings)
     {
-        $this->queryStrings = queryStrings;
+        $this->queryStrings = $queryStrings;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addQueryString($name, $value)
+    {
+        $this->queryStrings[$name] = $value;
 
         return $this;
     }
@@ -120,9 +138,9 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
     /**
      * {@inheritdoc}
      */
-    public function addLink($name, $value)
+    public function addLink($value)
     {
-        $this->links[$name] = $value;
+        $this->links[] = $value;
 
         return $this;
     }
@@ -160,10 +178,29 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
      */
     public function send()
     {
+        $logId = null;
+        if ($this->getLogger()) {
+            $logId = $this->getLogger()->startQuery(
+                $this->getMethod(),
+                $this->getPath(),
+                $this->getQueryStrings(),
+                $this->getHeaders()
+            );
+        }
+
         $response = $this
             ->buildRequest()
             ->executeRequest()
         ;
+
+        if (null !== $logId) {
+            $this->getLogger()->stopQuery(
+                $logId,
+                $response->getCode(),
+                $response->getContent(),
+                $response->headers
+            );
+        }
 
         if ($response->getStatusCode() >= 400) {
             throw new ApiHttpResponseException(
@@ -178,6 +215,8 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
 
     /**
      * Build the http request
+     *
+     * @return AbstractHttpTransport
      */
     abstract protected function buildRequest();
 

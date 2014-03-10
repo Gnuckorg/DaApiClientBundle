@@ -13,7 +13,8 @@ namespace Da\ApiClientBundle\Http\ApiClient;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Da\ApiClientBundle\Logging\RestLoggerInterface;
+use Da\ApiClientBundle\Http\Logger\RestLoggerInterface;
+use Da\ApiClientBundle\Http\Transport\HttpTransportFactory;
 use Da\AuthCommonBundle\Exception\ApiHttpResponseException;
 
 /**
@@ -109,9 +110,9 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
 
         return $transport
             ->setMethod('GET')
-            ->setPath($path)
-            ->setQueryString($queryString);
-            ->setHeaders($headers);
+            ->setPath($this->getApiEndpointPath($path))
+            ->setQueryStrings($queryString)
+            ->setHeaders($headers)
             ->send()
         ;
     }
@@ -121,12 +122,15 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function post($path, array $queryString = array(), array $headers = array())
     {
-        return CurlTransport::getInstance(
-            'POST',
-            $path,
-            $queryString,
-            $headers
-        )->execute();
+        $transport = HttpTransportFactory::build('curl', $logger);
+
+        return $transport
+            ->setMethod('POST')
+            ->setPath($this->getApiEndpointPath($path))
+            ->setQueryStrings($queryString)
+            ->setHeaders($headers)
+            ->send()
+        ;
     }
 
     /**
@@ -134,12 +138,15 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function put($path, array $queryString = array(), array $headers = array())
     {
-        return CurlTransport::getInstance(
-            'PUT',
-            $path,
-            $queryString,
-            $headers
-        )->execute();
+        $transport = HttpTransportFactory::build('curl', $logger);
+
+        return $transport
+            ->setMethod('PUT')
+            ->setPath($this->getApiEndpointPath($path))
+            ->setQueryStrings($queryString)
+            ->setHeaders($headers)
+            ->send()
+        ;
     }
 
     /**
@@ -147,12 +154,15 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function delete($path, array $queryString = array(), array $headers = array())
     {
-        return CurlTransport::getInstance(
-            'DELETE',
-            $path,
-            $queryString,
-            $headers
-        )->execute();
+        $transport = HttpTransportFactory::build('curl', $logger);
+
+        return $transport
+            ->setMethod('DELETE')
+            ->setPath($this->getApiEndpointPath($path))
+            ->setQueryStrings($queryString)
+            ->setHeaders($headers)
+            ->send()
+        ;
     }
 
     /**
@@ -160,12 +170,15 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function link($path, array $links, array $headers = array())
     {
-        return CurlTransport::getInstance(
-            'LINK',
-            $path,
-            $links,
-            $headers
-        )->execute();
+        $transport = HttpTransportFactory::build('curl', $logger);
+
+        return $transport
+            ->setMethod('LINK')
+            ->setPath($this->getApiEndpointPath($path))
+            ->setLinks($links)
+            ->setHeaders($headers)
+            ->send()
+        ;
     }
 
     /**
@@ -173,12 +186,15 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function unlink($path, array $links, array $headers = array())
     {
-        return CurlTransport::getInstance(
-            'UNLINK',
-            $path,
-            $links,
-            $headers
-        )->execute();
+        $transport = HttpTransportFactory::build('curl', $logger);
+
+        return $transport
+            ->setMethod('UNLINK')
+            ->setPath($this->getApiEndpointPath($path))
+            ->setLinks($links)
+            ->setHeaders($headers)
+            ->send()
+        ;
     }
 
     /**

@@ -22,14 +22,6 @@ class DebugStack implements RestLoggerInterface
      * @var array
      */
     protected $queries = array();
-
-    /** 
-     * If Debug Stack is enabled (log queries) or not.
-     *
-     * @var boolean
-     */
-    protected $enabled = true;
-
     protected $start = null;
     protected $currentQuery = 0;
 
@@ -46,32 +38,33 @@ class DebugStack implements RestLoggerInterface
     /**
      * {@inheritdoc}
      */
-    public function startQuery($endpoint, $method = null, array $queryString = null)
+    public function startQuery($requestUrl, $requestMethod, $requestHeaders = array(), array $requestQueryString = null)
     {
-        if ($this->enabled) {
-            $this->start = microtime(true);
-            $this->queries[++$this->currentQuery] = array(
-                'endpoint'        => $endpoint,
-                'method'          => $method,
-                'queryString'     => json_encode($queryString),
-                'executionMS'     => 0,
-                'responseCode'    => null,
-                'responseContent' => null,
-                'cacheEnabled'    => null,
-                'cacheTTL'        => null
-            );
-        }
+        $id = $this->currentQuery;
+        $this->start = microtime(true);
+        $this->queries[$id] = array(
+            'requestUrl'         => $requestUrl,
+            'requestMethod'      => $requestMethod,
+            'requestHeaders'     => $requestHeaders,
+            'requestQueryString' => json_encode($requestQueryString),
+            'executionMS'        => 0,
+            'responseCode'       => null,
+            'responseHeaders'    => null,
+            'responseContent'    => null
+        );
+        $this->currentQuery++;
+
+        return $id;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function stopQuery($responseCode, $responseContent)
+    public function stopQuery($id, $responseCode, $responseHeaders, $responseContent)
     {
-        if ($this->enabled) {
-            $this->queries[$this->currentQuery]['executionMS'] = microtime(true) - $this->start;
-            $this->queries[$this->currentQuery]['responseCode'] = $responseCode;
-            $this->queries[$this->currentQuery]['responseContent'] = $responseContent;
-        }
+        $this->queries[$id]['executionMS'] = microtime(true) - $this->start;
+        $this->queries[$id]['responseCode'] = $responseCode;
+        $this->queries[$id]['responseHeaders'] = $responseHeaders;
+        $this->queries[$id]['responseContent'] = $responseContent;
     }
 }

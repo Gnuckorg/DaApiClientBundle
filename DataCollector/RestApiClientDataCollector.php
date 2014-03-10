@@ -14,6 +14,7 @@ namespace Da\ApiClientBundle\DataCollector;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Da\ApiClientBundle\Http\Logger\RestLoggerInterface;
 
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
@@ -25,9 +26,9 @@ class RestApiClientDataCollector extends DataCollector
     /**
      * Constructor
      *
-     * @param \Da\ApiClientBundle\Logging\RestLoggerInterface $restLogger
+     * @param RestLoggerInterface $restLogger
      */
-    public function __construct(\Da\ApiClientBundle\Logging\RestLoggerInterface $restLogger)
+    public function __construct(RestLoggerInterface $restLogger)
     {
         $this->restLogger = $restLogger;
     }
@@ -35,7 +36,7 @@ class RestApiClientDataCollector extends DataCollector
     /**
      * Get Rest Logger
      *
-     * @return \Da\ApiClientBundle\Logging\RestLoggerInterface
+     * @return RestLoggerInterface
      */
     public function getRestLogger()
     {
