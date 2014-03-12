@@ -11,6 +11,8 @@
 
 namespace Da\ApiClientBundle\Http\ApiClient;
 
+use Da\ApiClientBundle\Http\Logger\RestLoggerInterface;
+
 /**
  * AbstractRestApiClientImplementor is an abstract class helping to 
  * define your own implementor with a basic implementation for some methods
@@ -41,6 +43,13 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
      * @var boolean
      */
     protected $cacheEnabled = true;
+
+    /**
+     * The logger.
+     *
+     * @var RestLoggerInterface
+     */
+    protected $logger = null;
 
     /**
      * {@inheritdoc}
@@ -97,12 +106,28 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     }
 
     /**
-     * Check if the security token is present
-     *
-     * @return boolean true if the token is set.
+     * {@inheritdoc}
      */
     public function hasSecurityToken()
     {
         return null !== $this->getSecurityToken();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLogger(RestLoggerInterface $logger)
+    {
+        $this->logger = $logger;
+
+        return $this->logger;
     }
 }

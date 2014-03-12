@@ -12,6 +12,7 @@
 namespace Da\ApiClientBundle\Http\Transport;
 
 use Da\ApiClientBundle\Http\logger\RestLoggerInterface;
+use Da\ApiClientBundle\Exception\ApiHttpResponseException;
 
 /**
  * AbstractHttpTransport
@@ -196,7 +197,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
         if (null !== $logId) {
             $this->getLogger()->stopQuery(
                 $logId,
-                $response->getCode(),
+                $response->getStatusCode(),
                 $response->getContent(),
                 $response->headers
             );
@@ -205,7 +206,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
         if ($response->getStatusCode() >= 400) {
             throw new ApiHttpResponseException(
                 $response->getUrl(),
-                $response->getCode(),
+                $response->getStatusCode(),
                 $response->getContent()
             );
         }

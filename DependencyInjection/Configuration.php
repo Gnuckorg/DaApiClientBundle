@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('logger')->defaultValue('da_api_client.rest_logger')->end()
                 ->arrayNode('api')
                     ->useAttributeAsKey('')
                     ->prototype('array')

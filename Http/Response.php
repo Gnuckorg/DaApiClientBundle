@@ -211,7 +211,7 @@ class Response
      */
     public function getUrl()
     {
-        return $this->content;
+        return $this->url;
     }
 
     /**

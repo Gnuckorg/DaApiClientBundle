@@ -12,6 +12,7 @@
 namespace Da\ApiClientBundle\Http\ApiClient;
 
 use Da\AuthCommonBundle\Security\AuthorizationRefresherInterface;
+use Da\ApiClientBundle\Http\Logger\RestLoggerInterface;
 
 /**
  * RestApiClientImplementorInterface is the interface that an RestApiClientImplementor
@@ -48,6 +49,13 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
     public function setSecurityToken($securityToken);
 
     /**
+     * Check if the security token is present
+     *
+     * @return boolean true if the token is set.
+     */
+    public function hasSecurityToken();
+
+    /**
      * Inform about the cache activation.
      *
      * @return bool True if the cache is enabled.
@@ -62,4 +70,20 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
      * @return RestApiClientImplementorInterface.
      */
     public function enableCache($enableCache);
+
+    /**
+     * Get the api logger
+     *
+     * @return string The security token.
+     */
+    public function getLogger();
+
+    /**
+     * Set the logger to log rest api request
+     *
+     * @param RestLoggerInterface $logger The logger to log rest api
+     *
+     * @return RestApiClientImplementorInterface.
+     */
+    public function setLogger(RestLoggerInterface $logger);
 }

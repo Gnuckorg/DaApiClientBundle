@@ -24,21 +24,17 @@ use Da\AuthCommonBundle\Exception\ApiHttpResponseException;
  */
 class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
 {
-    protected $logger;
-    protected $container;
-    protected $environment;
     protected $isFirstTry;
+    protected $container;
 
     /**
      * Constructor.
      */
-    public function __construct(RestLoggerInterface $logger, ContainerInterface $container, $environment)
+    public function __construct(ContainerInterface $container)
     {
         $this->isFirstTry = true;
-        $this->logger = $logger;
         // Use container to remove annoying circular dependencies.
         $this->container = $container;
-        $this->environment = $environment;
     }
 
     /**
