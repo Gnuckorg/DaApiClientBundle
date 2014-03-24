@@ -184,8 +184,8 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
             $queryId = $this->getLogger()->startQuery(
                 $this->getMethod(),
                 $this->getPath(),
-                $this->getQueryStrings(),
-                $this->getHeaders()
+                $this->getHeaders(),
+                $this->getQueryStrings()
             );
         }
 

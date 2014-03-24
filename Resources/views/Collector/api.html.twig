@@ -28,37 +28,67 @@
         <strong>API</strong>
         <span class="count">
             <span>{{ collector.countApiQueries }}</span>
-            <span>{{ '%0.0f'|format(collector.sumExecutionMS * 1000) }} ms</span>
+            <span>{{ '%0.2f'|format(collector.sumExecutionMS * 1000) }} ms</span>
         </span>
     </span>
     {# the menu content #}
 {% endblock %}
 
 {% block panel %}
-    <h2>API Queries details</h2>
+    <h2>Queries</h2>
 
-    <table>
-        <tr>
-            <th>RequestUrl</th>
-            <th>RequestMethod</th>
-            <th>RequestHeaders</th>
-            <th>RequestQueryString</th>
-            <th>ExecutionMS</th>
-            <th>ReponseCode</th>
-            <th>ReponseHeaders</th>
-            <th>ReponseContent</th>
-        </tr>
-        {% for query in collector.apiQueries %}
-            <tr>
-                <td><code>{{ query.requestUrl }}</code></td>
-                <td><code>{{ query.requestMethod }}</code></td>
-                <td><code>{{ query.requestHeaders }}</code></td>
-                <td><code>{{ query.requestQueryString }}</code></td>
-                <td><code>{{ query.executionMS }}</code></td>
-                <td><code>{{ query.responseCode }}</code></td>
-                <td><code>{{ query.responseHeaders }}</code></td>
-                <td><code>{{ query.responseContent }}</code></td>
-            </tr>
+    {% if collector.apiQueries is empty %}
+        <p>
+            <em>No queries.</em>
+        </p>
+    {% else %}
+        <ul class="alt" id="queriesPlaceholder">
+        {% for i,query in collector.apiQueries %}
+            <li class="{{ cycle(['odd', 'even'], i) }}" data-extra-info="{{ '%0.2f'|format(query.executionMS * 1000) }}" data-target-id="{{ i }}">
+                <div style="margin-top: 4px" id="queryNo-{{ i }} }}">
+                    <div onclick="return expandQuery(this);" title="Expand Api Query" data-target-id="code-{{ i }}" style="cursor: pointer;">
+                        <img alt="+" src="{{ asset('bundles/framework/images/blue_picto_more.gif') }}" style="display: inline;" />
+                        <img alt="-" src="{{ asset('bundles/framework/images/blue_picto_less.gif') }}" style="display: none;" />
+                        <span id="smallcode-{{ i }}">
+                            [{{ query.requestMethod }}] {{ query.requestUrl }}
+                        </span>
+                    </div>
+                    <div id="response-{{ i }}" style="display: none;">
+                        <label>Header:</label>
+                        <p style="margin-bottom: 4px; padding: 3px; font-size:10px;">{{ query.responseHeaders|raw }}</p>
+                        <label>Content:</label>
+                        <p style="margin-bottom: 4px; padding: 3px; font-size:10px;">{{ query.responseContent|raw }}</p>
+                    </div>
+                    <small>
+                        <strong>Request Headers</strong>: {{ query.requestHeaders }}<br />
+                        <strong>Request Query String</strong>: {{ query.requestQueryString }}<br />
+                        <strong>Reponse Code</strong>: {{ query.responseCode }}<br />
+                        <strong>Time</strong>: {{ '%0.2f'|format(query.executionMS * 1000) }} ms
+                    </small>
+                </div>
+            </li>
         {% endfor %}
-    </table>
+        </ul>
+    {% endif %}
+
+    <script type="text/javascript">//<![CDATA[
+        function expandQuery(link) {
+            var sections = link.children,
+                target = link.getAttribute('data-target-id'),
+                targetId = target.replace('code', ''),
+                response = document.getElementById('response' + targetId);
+
+            if (response.style.display != 'none') {
+                response.style.display = 'none';
+                sections[0].style.display = 'inline';
+                sections[1].style.display = 'none';
+            } else {
+                response.style.display = 'block';
+                sections[0].style.display = 'none';
+                sections[1].style.display = 'inline';
+            }
+
+            return false;
+        }
+    //]]></script>
 {% endblock %}

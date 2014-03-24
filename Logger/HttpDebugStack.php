@@ -12,6 +12,7 @@
 namespace Da\ApiClientBundle\Logger;
 
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
@@ -22,14 +23,21 @@ class HttpDebugStack implements HttpLoggerInterface
     protected $start;
     protected $currentQuery;
     protected $logger;
+    protected $stopwatch;
 
-
-    public function __construct(LoggerInterface $logger)
+    /**
+     * Constructor
+     *
+     * @param LoggerInterface $logger
+     * @param Stopwatch       $stopwatch
+     */
+    public function __construct(LoggerInterface $logger = null, Stopwatch $stopwatch = null)
     {
         $this->queries = array();
         $this->start = null;
         $this->currentQuery = 0;
         $this->logger = $logger;
+        $this->stopwatch = $stopwatch;
     }
 
     /**
@@ -45,8 +53,12 @@ class HttpDebugStack implements HttpLoggerInterface
     /**
      * {@inheritdoc}
      */
-    public function startQuery($requestUrl, $requestMethod, $requestHeaders = array(), array $requestQueryString = array())
+    public function startQuery($requestMethod, $requestUrl, array $requestHeaders = array(), array $requestQueryString = array())
     {
+        if (null !== $this->stopwatch) {
+            $this->stopwatch->start('da_api_client', 'da_api_client');
+        }
+
         $id = $this->currentQuery;
         $this->start = microtime(true);
         $this->queries[$id] = array(
@@ -69,28 +81,34 @@ class HttpDebugStack implements HttpLoggerInterface
      */
     public function stopQuery($id, $responseCode, $responseHeaders, $responseContent)
     {
+        if (null !== $this->stopwatch) {
+            $this->stopwatch->stop('da_api_client');
+        }
+
         $this->queries[$id]['executionMS'] = microtime(true) - $this->start;
         $this->queries[$id]['responseCode'] = $responseCode;
         $this->queries[$id]['responseHeaders'] = json_encode($responseHeaders);
         $this->queries[$id]['responseContent'] = $responseContent;
 
-        $this->logger->info(sprintf('DaApiClient [%s] Request', $id), array(
-            'requestUrl'         => $this->queries[$id]['requestUrl'],
-            'requestMethod'      => $this->queries[$id]['requestMethod'],
-            'requestQueryString' => $this->queries[$id]['requestQueryString']
-        ));
-        $this->logger->debug(sprintf('DaApiClient [%s] Request debug', $id), array(
-            'requestHeaders'     => $this->queries[$id]['requestHeaders']
-        ));
-        $this->logger->info(sprintf('DaApiClient [%s] Response', $id), array(
-            'responseCode'       => $this->queries[$id]['responseCode']
-        ));
-        $this->logger->debug(sprintf('DaApiClient [%s] Response debug', $id), array(
-            'responseHeaders'    => $this->queries[$id]['responseHeaders'],
-            'responseContent'    => $this->queries[$id]['responseContent']
-        ));
-        $this->logger->info(sprintf('DaApiClient [%s] Execution MS', $id), array(
-            'executionMS'        => $this->queries[$id]['executionMS'].' ms'
-        ));
+        if (null !== $this->logger) {
+            $this->logger->info(sprintf('DaApiClient [%s] Request', $id), array(
+                'requestUrl'         => $this->queries[$id]['requestUrl'],
+                'requestMethod'      => $this->queries[$id]['requestMethod'],
+                'requestQueryString' => $this->queries[$id]['requestQueryString']
+            ));
+            $this->logger->debug(sprintf('DaApiClient [%s] Request debug', $id), array(
+                'requestHeaders'     => $this->queries[$id]['requestHeaders']
+            ));
+            $this->logger->info(sprintf('DaApiClient [%s] Response', $id), array(
+                'responseCode'       => $this->queries[$id]['responseCode']
+            ));
+            $this->logger->debug(sprintf('DaApiClient [%s] Response debug', $id), array(
+                'responseHeaders'    => $this->queries[$id]['responseHeaders'],
+                'responseContent'    => $this->queries[$id]['responseContent']
+            ));
+            $this->logger->info(sprintf('DaApiClient [%s] Execution time', $id), array(
+                'executionTime'      => $this->queries[$id]['executionMS'].' ms'
+            ));
+        }
     }
 }
