@@ -28,6 +28,10 @@ class DaApiClientExtension extends Extension
         $loader->load('services.yml');
 
         foreach ($config['api'] as $apiName => $apiConfiguration) {
+            $apiConfiguration = array_merge(
+                $apiConfiguration,
+                array('log_enabled' => $config['log_enabled'])
+            );
             $service = $apiConfiguration['client']['service'];
             $implementor = $apiConfiguration['client']['implementor'];
 
@@ -38,9 +42,16 @@ class DaApiClientExtension extends Extension
             $implementorDefinition->addTag('da_api_client.api_implementor');
 
             $serviceDefinition = new DefinitionDecorator($service);
-            $serviceDefinition->isAbstract(false);
             $serviceDefinition->replaceArgument(0, new Reference($implementorId));
             $serviceDefinition->replaceArgument(1, $apiConfiguration);
+/*
+            $serviceDefinition->addMethodCall('setCacher', array(
+                new Reference('da_api_client.http_cacher'))
+            );
+*/
+            $serviceDefinition->addMethodCall('setLogger', array(
+                new Reference('da_api_client.http_logger'))
+            );
             $serviceDefinition->addTag('da_api_client.api');
             $container->setDefinition(
                 sprintf('da_api_client.api.%s', $apiName),

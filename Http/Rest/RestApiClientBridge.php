@@ -11,6 +11,9 @@
 
 namespace Da\ApiClientBundle\Http\Rest;
 
+use Da\ApiClientBundle\Cacher\HttpCacherInterface;
+use Da\ApiClientBundle\Logger\HttpLoggerInterface;
+
 /**
  * RestApiClientBridge is the abstraction class of a bridge pattern allowing
  * to dynamically change the implementation for the REST API client.
@@ -33,12 +36,38 @@ class RestApiClientBridge implements RestApiClientInterface
      * @param RestApiClientImplementorInterface $implementor
      * @param array                             $configuration
      */
-    public function __construct(RestApiClientImplementorInterface $implementor, array $configuration)
+    public function __construct(
+        RestApiClientImplementorInterface $implementor,
+        array $configuration
+    )
     {
         $this->implementor = $implementor;
-        $this->implementor->setEndpointRoot($configuration['endpoint_root']);
-        $this->implementor->setSecurityToken($configuration['security_token']);
-        $this->implementor->enableCache($configuration['cache_enabled']);
+        $this->implementor
+            ->setEndpointRoot($configuration['endpoint_root'])
+            ->setSecurityToken($configuration['security_token'])
+            ->setCacheEnabled($configuration['cache_enabled'])
+            ->setLogEnabled($configuration['log_enabled'])
+        ;
+    }
+
+    /**
+     * Set cacher
+     *
+     * @param HttpCacherInterface $cacher
+     */
+    public function setCacher($cacher)
+    {
+        $this->implementor->setCacher($cacher);
+    }
+
+    /**
+     * Set logger
+     *
+     * @param HttpLoggerInterface $logger
+     */
+    public function setLogger($logger)
+    {
+        $this->implementor->setLogger($logger);
     }
 
     /**

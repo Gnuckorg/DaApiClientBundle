@@ -11,19 +11,26 @@
 
 namespace Da\ApiClientBundle\Logger;
 
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
+
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
 class HttpDebugStack implements HttpLoggerInterface
 {
-    /**
-     * Executed REST API queries.
-     *
-     * @var array
-     */
-    protected $queries = array();
-    protected $start = null;
-    protected $currentQuery = 0;
+    protected $queries;
+    protected $start;
+    protected $currentQuery;
+    protected $logger;
+
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->queries = array();
+        $this->start = null;
+        $this->currentQuery = 0;
+        $this->logger = $logger;
+    }
 
     /**
      * Get queries
@@ -66,5 +73,24 @@ class HttpDebugStack implements HttpLoggerInterface
         $this->queries[$id]['responseCode'] = $responseCode;
         $this->queries[$id]['responseHeaders'] = json_encode($responseHeaders);
         $this->queries[$id]['responseContent'] = $responseContent;
+
+        $this->logger->info(sprintf('DaApiClient [%s] Request', $id), array(
+            'requestUrl'         => $this->queries[$id]['requestUrl'],
+            'requestMethod'      => $this->queries[$id]['requestMethod'],
+            'requestQueryString' => $this->queries[$id]['requestQueryString']
+        ));
+        $this->logger->debug(sprintf('DaApiClient [%s] Request debug', $id), array(
+            'requestHeaders'     => $this->queries[$id]['requestHeaders']
+        ));
+        $this->logger->info(sprintf('DaApiClient [%s] Response', $id), array(
+            'responseCode'       => $this->queries[$id]['responseCode']
+        ));
+        $this->logger->debug(sprintf('DaApiClient [%s] Response debug', $id), array(
+            'responseHeaders'    => $this->queries[$id]['responseHeaders'],
+            'responseContent'    => $this->queries[$id]['responseContent']
+        ));
+        $this->logger->info(sprintf('DaApiClient [%s] Execution MS', $id), array(
+            'executionMS'        => $this->queries[$id]['executionMS'].' ms'
+        ));
     }
 }

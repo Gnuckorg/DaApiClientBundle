@@ -12,6 +12,7 @@
 namespace Da\ApiClientBundle\Http\Rest;
 
 use Da\AuthCommonBundle\Security\AuthorizationRefresherInterface;
+use Da\ApiClientBundle\Cacher\HttpCacherInterface;
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 
 /**
@@ -56,25 +57,41 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
     public function hasSecurityToken();
 
     /**
-     * Inform about the cache activation.
+     * Get the api cacher
      *
-     * @return bool True if the cache is enabled.
+     * @return HttpCacherInterface|null.
+     */
+    public function getCacher();
+
+    /**
+     * Set the cacher to cache rest api request
+     *
+     * @param HttpCacherInterface $cacher The cacher to cache rest api
+     *
+     * @return RestApiClientImplementorInterface.
+     */
+    public function setCacher(HttpCacherInterface $cacher);
+
+    /**
+     * Is cache enabled
+     *
+     * @return boolean.
      */
     public function isCacheEnabled();
 
     /**
-     * Enable or disable the cache.
+     * Set cache enabled
      *
-     * @param bool $enableCache Should enable the cache or not
+     * @param boolean $cacheEnabled
      *
      * @return RestApiClientImplementorInterface.
      */
-    public function enableCache($enableCache);
+    public function setCacheEnabled($cacheEnabled);
 
     /**
      * Get the api logger
      *
-     * @return HttpLoggerInterface.
+     * @return HttpLoggerInterface|null.
      */
     public function getLogger();
 
@@ -86,4 +103,20 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
      * @return RestApiClientImplementorInterface.
      */
     public function setLogger(HttpLoggerInterface $logger);
+
+    /**
+     * Is log enabled
+     *
+     * @return boolean.
+     */
+    public function isLogEnabled();
+
+    /**
+     * Set log enabled
+     *
+     * @param boolean $logEnabled
+     *
+     * @return RestApiClientImplementorInterface.
+     */
+    public function setLogEnabled($logEnabled);
 }

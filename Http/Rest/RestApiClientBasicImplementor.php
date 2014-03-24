@@ -24,7 +24,6 @@ use Da\AuthCommonBundle\Exception\ApiHttpResponseException;
  */
 class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
 {
-    protected $isFirstTry;
     protected $container;
 
     /**
@@ -32,7 +31,6 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->isFirstTry = true;
         // Use container to remove annoying circular dependencies.
         $this->container = $container;
     }
@@ -59,16 +57,6 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
         }
 
         return $accessToken;
-    }
-
-    /**
-     * Get Logger
-     *
-     * @return HttpLoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->container->get('da_api_client.http_logger');
     }
 
     /**

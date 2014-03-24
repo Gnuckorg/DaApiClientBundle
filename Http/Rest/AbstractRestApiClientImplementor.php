@@ -12,6 +12,7 @@
 namespace Da\ApiClientBundle\Http\Rest;
 
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
+use Da\ApiClientBundle\Cacher\HttpCacherInterface;
 
 /**
  * AbstractRestApiClientImplementor is an abstract class helping to 
@@ -38,18 +39,32 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     protected $securityToken;
 
     /**
-     * The flag to enable the cache.
+     * The Cacher.
+     *
+     * @var HttpCacherInterface
+     */
+    protected $cacher;
+
+    /**
+     * The flag to use or not the cacher.
      *
      * @var boolean
      */
-    protected $cacheEnabled = true;
+    protected $cacheEnabled;
 
     /**
      * The logger.
      *
-     * @var RestLoggerInterface
+     * @var HttpLoggerInterface
      */
-    protected $logger = null;
+    protected $logger;
+
+    /**
+     * The flag to use or not the logger.
+     *
+     * @var boolean
+     */
+    protected $logEnabled;
 
     /**
      * {@inheritdoc}
@@ -90,9 +105,29 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     /**
      * {@inheritdoc}
      */
-    public function enableCache($cacheEnabled)
+    public function hasSecurityToken()
     {
-        $this->cacheEnabled = (bool)$cacheEnabled;
+        return null !== $this->getSecurityToken();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCacher()
+    {
+        if (!$this->isCacheEnabled()) {
+            return null;
+        }
+
+        return $this->cacher;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCacher(HttpCacherInterface $cacher)
+    {
+        $this->cacher = $cacher;
 
         return $this;
     }
@@ -108,9 +143,11 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     /**
      * {@inheritdoc}
      */
-    public function hasSecurityToken()
+    public function setCacheEnabled($cacheEnabled)
     {
-        return null !== $this->getSecurityToken();
+        $this->cacheEnabled = $cacheEnabled;
+
+        return $this;
     }
 
     /**
@@ -118,6 +155,10 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
      */
     public function getLogger()
     {
+        if (!$this->isLogEnabled()) {
+            return null;
+        }
+
         return $this->logger;
     }
 
@@ -128,6 +169,24 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     {
         $this->logger = $logger;
 
-        return $this->logger;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isLogEnabled()
+    {
+        return $this->logEnabled;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLogEnabled($logEnabled)
+    {
+        $this->logEnabled = $logEnabled;
+
+        return $this;
     }
 }
