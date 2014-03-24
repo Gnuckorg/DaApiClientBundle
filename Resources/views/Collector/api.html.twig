@@ -14,7 +14,7 @@
         </div>
         <div class="sf-toolbar-info-piece">
             <b>Query time</b>
-            <span>{{ '%0.2f'|format(collector.sumExecutionMS * 1000) }} ms</span>
+            <span>{{ '%0.2f'|format(collector.sumExecutionMS) }} ms</span>
         </div>
     {% endset %}
     {% include "@WebProfiler/Profiler/toolbar_item.html.twig" with { "link": profiler_url } %}
@@ -28,7 +28,7 @@
         <strong>API</strong>
         <span class="count">
             <span>{{ collector.countApiQueries }}</span>
-            <span>{{ '%0.2f'|format(collector.sumExecutionMS * 1000) }} ms</span>
+            <span>{{ '%0.2f'|format(collector.sumExecutionMS) }} ms</span>
         </span>
     </span>
     {# the menu content #}
@@ -44,7 +44,7 @@
     {% else %}
         <ul class="alt" id="queriesPlaceholder">
         {% for i,query in collector.apiQueries %}
-            <li class="{{ cycle(['odd', 'even'], i) }}" data-extra-info="{{ '%0.2f'|format(query.executionMS * 1000) }}" data-target-id="{{ i }}">
+            <li class="{{ cycle(['odd', 'even'], i) }}" data-extra-info="{{ '%0.2f'|format(query.executionMS) }}" data-target-id="{{ i }}">
                 <div style="margin-top: 4px" id="queryNo-{{ i }} }}">
                     <div onclick="return expandQuery(this);" title="Expand Api Query" data-target-id="code-{{ i }}" style="cursor: pointer;">
                         <img alt="+" src="{{ asset('bundles/framework/images/blue_picto_more.gif') }}" style="display: inline;" />
@@ -63,7 +63,7 @@
                         <strong>Request Headers</strong>: {{ query.requestHeaders }}<br />
                         <strong>Request Query String</strong>: {{ query.requestQueryString }}<br />
                         <strong>Reponse Code</strong>: {{ query.responseCode }}<br />
-                        <strong>Time</strong>: {{ '%0.2f'|format(query.executionMS * 1000) }} ms
+                        <strong>Time</strong>: {{ '%0.2f'|format(query.executionMS) }} ms
                     </small>
                 </div>
             </li>

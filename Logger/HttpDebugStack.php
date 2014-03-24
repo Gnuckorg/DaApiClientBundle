@@ -85,7 +85,7 @@ class HttpDebugStack implements HttpLoggerInterface
             $this->stopwatch->stop('da_api_client');
         }
 
-        $this->queries[$id]['executionMS'] = microtime(true) - $this->start;
+        $this->queries[$id]['executionMS'] = (microtime(true) - $this->start) * 1000;
         $this->queries[$id]['responseCode'] = $responseCode;
         $this->queries[$id]['responseHeaders'] = json_encode($responseHeaders);
         $this->queries[$id]['responseContent'] = $responseContent;
@@ -107,7 +107,7 @@ class HttpDebugStack implements HttpLoggerInterface
                 'responseContent'    => $this->queries[$id]['responseContent']
             ));
             $this->logger->info(sprintf('DaApiClient [%s] Execution time', $id), array(
-                'executionTime'      => $this->queries[$id]['executionMS'].' ms'
+                'executionTime'      => sprintf('%.2f ms', $this->queries[$id]['executionMS'])
             ));
         }
     }
