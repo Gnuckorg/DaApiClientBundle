@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Da\ApiClientBundle\Http\ApiClient;
+namespace Da\ApiClientBundle\Http\Rest;
 
 use Da\AuthCommonBundle\Security\AuthorizationRefresherInterface;
-use Da\ApiClientBundle\Http\Logger\RestLoggerInterface;
+use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 
 /**
  * RestApiClientImplementorInterface is the interface that an RestApiClientImplementor
@@ -74,16 +74,16 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
     /**
      * Get the api logger
      *
-     * @return string The security token.
+     * @return HttpLoggerInterface.
      */
     public function getLogger();
 
     /**
      * Set the logger to log rest api request
      *
-     * @param RestLoggerInterface $logger The logger to log rest api
+     * @param HttpLoggerInterface $logger The logger to log rest api
      *
      * @return RestApiClientImplementorInterface.
      */
-    public function setLogger(RestLoggerInterface $logger);
+    public function setLogger(HttpLoggerInterface $logger);
 }

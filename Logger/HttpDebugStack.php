@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Da\ApiClientBundle\Http\Logger;
+namespace Da\ApiClientBundle\Logger;
 
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
-class DebugStack implements RestLoggerInterface
+class HttpDebugStack implements HttpLoggerInterface
 {
     /**
      * Executed REST API queries.

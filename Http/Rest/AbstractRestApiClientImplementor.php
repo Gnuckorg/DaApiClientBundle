@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Da\ApiClientBundle\Http\ApiClient;
+namespace Da\ApiClientBundle\Http\Rest;
 
-use Da\ApiClientBundle\Http\Logger\RestLoggerInterface;
+use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 
 /**
  * AbstractRestApiClientImplementor is an abstract class helping to 
@@ -124,7 +124,7 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     /**
      * {@inheritdoc}
      */
-    public function setLogger(RestLoggerInterface $logger)
+    public function setLogger(HttpLoggerInterface $logger)
     {
         $this->logger = $logger;
 

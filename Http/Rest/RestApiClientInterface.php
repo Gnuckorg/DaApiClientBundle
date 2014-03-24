@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Da\ApiClientBundle\Http\ApiClient;
+namespace Da\ApiClientBundle\Http\Rest;
 
 /**
  * RestApiClientInterface
@@ -42,7 +42,7 @@ interface RestApiClientInterface
     /**
      * Post
      *
-     * @param string $path       The relative path to the webservice.
+     * @param string $path        The relative path to the webservice.
      * @param array  $queryString The specific queryString to the webservice.
      * @param array  $headers     The optionnal headers.
      *
@@ -55,7 +55,7 @@ interface RestApiClientInterface
     /**
      * Put
      *
-     * @param string $path       The relative path to the webservice.
+     * @param string $path        The relative path to the webservice.
      * @param array  $queryString The specific queryString to the webservice.
      * @param array  $headers     The optionnal headers.
      *

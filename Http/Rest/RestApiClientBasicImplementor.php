@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Da\ApiClientBundle\Http\ApiClient;
+namespace Da\ApiClientBundle\Http\Rest;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Da\ApiClientBundle\Http\Logger\RestLoggerInterface;
+use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 use Da\ApiClientBundle\Http\Transport\HttpTransportFactory;
 use Da\AuthCommonBundle\Exception\ApiHttpResponseException;
 
@@ -64,7 +64,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * Get Logger
      *
-     * @return Da\ApiClientBundle\Logging\RestLogger
+     * @return HttpLoggerInterface
      */
     public function getLogger()
     {

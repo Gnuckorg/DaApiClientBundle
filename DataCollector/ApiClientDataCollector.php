@@ -14,53 +14,53 @@ namespace Da\ApiClientBundle\DataCollector;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Da\ApiClientBundle\Http\Logger\RestLoggerInterface;
+use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
-class RestApiClientDataCollector extends DataCollector
+class ApiClientDataCollector extends DataCollector
 {
-    protected $restLogger;
+    protected $logger;
 
     /**
      * Constructor
      *
-     * @param RestLoggerInterface $restLogger
+     * @param HttpLoggerInterface $logger
      */
-    public function __construct(RestLoggerInterface $restLogger)
+    public function __construct(HttpLoggerInterface $logger)
     {
-        $this->restLogger = $restLogger;
+        $this->logger = $logger;
     }
 
     /**
-     * Get Rest Logger
+     * Get Logger
      *
-     * @return RestLoggerInterface
+     * @return HttpLoggerInterface
      */
-    public function getRestLogger()
+    public function getLogger()
     {
-        return $this->restLogger;
+        return $this->logger;
     }
 
     /**
-     * Get Rest API queries
+     * Get API queries
      *
      * @return array
      */
-    public function getRestApiQueries()
+    public function getApiQueries()
     {
-        return $this->data['rest_api_queries'];
+        return $this->data['api_queries'];
     }
 
     /**
-     * Count Rest API queries
+     * Count API queries
      *
      * @return integer
      */
-    public function countRestApiQueries()
+    public function countApiQueries()
     {
-        return count($this->getRestApiQueries());
+        return count($this->getApiQueries());
     }
 
     /**
@@ -71,7 +71,7 @@ class RestApiClientDataCollector extends DataCollector
     public function getSumExecutionMS()
     {
         $sum = 0;
-        foreach($this->getRestApiQueries() as $query) {
+        foreach($this->getApiQueries() as $query) {
             $sum += $query['executionMS'];
         }
 
@@ -83,7 +83,7 @@ class RestApiClientDataCollector extends DataCollector
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
-        $this->data['rest_api_queries'] = $this->getRestLogger()->getQueries();
+        $this->data['api_queries'] = $this->getLogger()->getQueries();
     }
 
     /**
@@ -91,6 +91,6 @@ class RestApiClientDataCollector extends DataCollector
      */
     public function getName()
     {
-        return 'rest_api';
+        return 'api';
     }
 }

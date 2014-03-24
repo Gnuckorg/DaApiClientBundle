@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Da\ApiClientBundle\Http\ApiClient;
+namespace Da\ApiClientBundle\Http\Rest;
 
 /**
  * RestApiClientBridge is the abstraction class of a bridge pattern allowing

@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Da\ApiClientBundle\Http\Logger;
+namespace Da\ApiClientBundle\Logger;
 
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
-interface RestLoggerInterface
+interface HttpLoggerInterface
 {
     /**
      * Logs a REST Api statement somewhere.
