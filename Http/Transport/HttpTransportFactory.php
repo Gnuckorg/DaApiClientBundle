@@ -12,6 +12,7 @@
 namespace Da\ApiClientBundle\Http\Transport;
 
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
+use Da\ApiClientBundle\Exception\UndefinedTransportException;
 
 /**
  * HttpTransportFactory
@@ -23,8 +24,8 @@ abstract class HttpTransportFactory
     /**
      * Build
      *
-     * @param string              $transportName
-     * @param HttpLoggerInterface $logger
+     * @param  string                 $transportName
+     * @param  HttpLoggerInterface    $logger
      * @return HttpTransportInterface
      */
     public static function build($transportName, HttpLoggerInterface $logger = null)
@@ -33,6 +34,10 @@ abstract class HttpTransportFactory
             'Da\ApiClientBundle\Http\Transport\%sHttpTransport',
             ucfirst(strtolower($transportName))
         );
+
+        if (!class_exists($className)) {
+            throw new UndefinedTransportException($className);
+        }
 
         return new $className($logger);
     }
