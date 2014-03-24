@@ -68,7 +68,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function getLogger()
     {
-        return $this->logger;
+        return $this->container->get('da_api_client.http_logger');
     }
 
     /**
@@ -101,8 +101,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     public function get($path, array $queryString = array(), array $headers = array())
     {
         $path = self::addQueryString($path, $queryString);
-        $logger = null;
-        $transport = HttpTransportFactory::build('curl', $logger);
+        $transport = HttpTransportFactory::build('curl', $this->getLogger());
 
         return $transport
             ->setMethod('GET')
@@ -118,7 +117,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function post($path, array $queryString = array(), array $headers = array())
     {
-        $transport = HttpTransportFactory::build('curl', $logger);
+        $transport = HttpTransportFactory::build('curl', $this->getLogger());
 
         return $transport
             ->setMethod('POST')
@@ -134,7 +133,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function put($path, array $queryString = array(), array $headers = array())
     {
-        $transport = HttpTransportFactory::build('curl', $logger);
+        $transport = HttpTransportFactory::build('curl', $this->getLogger());
 
         return $transport
             ->setMethod('PUT')
@@ -150,7 +149,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function delete($path, array $queryString = array(), array $headers = array())
     {
-        $transport = HttpTransportFactory::build('curl', $logger);
+        $transport = HttpTransportFactory::build('curl', $this->getLogger());
 
         return $transport
             ->setMethod('DELETE')
@@ -166,7 +165,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function link($path, array $links, array $headers = array())
     {
-        $transport = HttpTransportFactory::build('curl', $logger);
+        $transport = HttpTransportFactory::build('curl', $this->getLogger());
 
         return $transport
             ->setMethod('LINK')
@@ -182,7 +181,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function unlink($path, array $links, array $headers = array())
     {
-        $transport = HttpTransportFactory::build('curl', $logger);
+        $transport = HttpTransportFactory::build('curl', $this->getLogger());
 
         return $transport
             ->setMethod('UNLINK')

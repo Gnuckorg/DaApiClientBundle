@@ -11,7 +11,7 @@
 
 namespace Da\ApiClientBundle\Http\Transport;
 
-use Da\ApiClientBundle\Http\logger\RestLoggerInterface;
+use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 
 /**
  * HttpTransportInterface.
@@ -23,14 +23,14 @@ interface HttpTransportInterface
     /**
      * Constructor
      *
-     * @param RestLoggerInterface $logger
+     * @param HttpLoggerInterface $logger
      */
-    public function __construct(RestLoggerInterface $logger = null);
+    public function __construct(HttpLoggerInterface $logger = null);
 
     /**
      * Get the logger
      *
-     * @return RestLoggerInterface
+     * @return HttpLoggerInterface
      */
     public function getLogger();
 

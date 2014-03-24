@@ -18,7 +18,6 @@ services:
 
     da_api_client.http_logger:
         class:     %da_api_client.http_logger.class%
-        public:    false
 
     da_api_client.data_collector:
         class:     %da_api_client.data_collector.class%

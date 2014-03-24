@@ -11,7 +11,7 @@
 
 namespace Da\ApiClientBundle\Http\Transport;
 
-use Da\ApiClientBundle\Http\logger\RestLoggerInterface;
+use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 use Da\ApiClientBundle\Exception\ApiHttpResponseException;
 
 /**
@@ -33,7 +33,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
     /**
      * {@inheritdoc}
      */
-    public function __construct(RestLoggerInterface $logger = null)
+    public function __construct(HttpLoggerInterface $logger = null)
     {
         $this->logger = $logger;
     }
@@ -179,9 +179,9 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
      */
     public function send()
     {
-        $logId = null;
+        $queryId = null;
         if ($this->getLogger()) {
-            $logId = $this->getLogger()->startQuery(
+            $queryId = $this->getLogger()->startQuery(
                 $this->getMethod(),
                 $this->getPath(),
                 $this->getQueryStrings(),
@@ -194,12 +194,12 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
             ->executeRequest()
         ;
 
-        if (null !== $logId) {
+        if (null !== $queryId) {
             $this->getLogger()->stopQuery(
-                $logId,
+                $queryId,
                 $response->getStatusCode(),
-                $response->getContent(),
-                $response->headers
+                $response->headers->all(),
+                $response->getContent()
             );
         }
 

@@ -11,15 +11,15 @@
 
 namespace Da\ApiClientBundle\Http\Transport;
 
-use Da\ApiClientBundle\Http\logger\RestLoggerInterface;
+use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 use Da\ApiClientBundle\Http\Response;
 
 /**
- * CurlTransport.
+ * CurlHttpTransport.
  *
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
-class CurlTransport extends AbstractHttpTransport
+class CurlHttpTransport extends AbstractHttpTransport
 {
     const USER_AGENT_NAME = "DaApiClient php/curl/REST-UA";
 
@@ -28,9 +28,9 @@ class CurlTransport extends AbstractHttpTransport
     /**
      * {@inheritdoc}
      */
-    public function __construct(RestLoggerInterface $logger = null)
+    public function __construct(HttpLoggerInterface $logger = null)
     {
-        parent::__construct();
+        parent::__construct($logger);
 
         $this->cUrl = curl_init();
         $this

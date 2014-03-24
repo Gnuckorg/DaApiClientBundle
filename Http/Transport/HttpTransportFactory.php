@@ -11,7 +11,7 @@
 
 namespace Da\ApiClientBundle\Http\Transport;
 
-use Da\ApiClientBundle\Http\Logger\RestLoggerInterface;
+use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 
 /**
  * HttpTransportFactory
@@ -24,13 +24,13 @@ abstract class HttpTransportFactory
      * Build
      *
      * @param string              $transportName
-     * @param RestLoggerInterface $logger
+     * @param HttpLoggerInterface $logger
      * @return HttpTransportInterface
      */
-    public static function build($transportName, RestLoggerInterface $logger = null)
+    public static function build($transportName, HttpLoggerInterface $logger = null)
     {
         $className = sprintf(
-            'Da\ApiClientBundle\Http\Transport\%sTransport',
+            'Da\ApiClientBundle\Http\Transport\%sHttpTransport',
             ucfirst(strtolower($transportName))
         );
 

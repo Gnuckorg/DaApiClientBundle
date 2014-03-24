@@ -38,14 +38,14 @@ class HttpDebugStack implements HttpLoggerInterface
     /**
      * {@inheritdoc}
      */
-    public function startQuery($requestUrl, $requestMethod, $requestHeaders = array(), array $requestQueryString = null)
+    public function startQuery($requestUrl, $requestMethod, $requestHeaders = array(), array $requestQueryString = array())
     {
         $id = $this->currentQuery;
         $this->start = microtime(true);
         $this->queries[$id] = array(
             'requestUrl'         => $requestUrl,
             'requestMethod'      => $requestMethod,
-            'requestHeaders'     => $requestHeaders,
+            'requestHeaders'     => json_encode($requestHeaders),
             'requestQueryString' => json_encode($requestQueryString),
             'executionMS'        => 0,
             'responseCode'       => null,
@@ -64,7 +64,7 @@ class HttpDebugStack implements HttpLoggerInterface
     {
         $this->queries[$id]['executionMS'] = microtime(true) - $this->start;
         $this->queries[$id]['responseCode'] = $responseCode;
-        $this->queries[$id]['responseHeaders'] = $responseHeaders;
+        $this->queries[$id]['responseHeaders'] = json_encode($responseHeaders);
         $this->queries[$id]['responseContent'] = $responseContent;
     }
 }
