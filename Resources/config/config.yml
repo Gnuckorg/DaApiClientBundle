@@ -1,7 +1,7 @@
 doctrine_cache:
     providers:
         da_api_client:
-            memcached:
+            memcache:
                 servers:
                     memcached01:
                         host: localhost

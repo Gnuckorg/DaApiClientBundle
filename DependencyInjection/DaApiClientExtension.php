@@ -44,14 +44,15 @@ class DaApiClientExtension extends Extension
             $serviceDefinition = new DefinitionDecorator($service);
             $serviceDefinition->replaceArgument(0, new Reference($implementorId));
             $serviceDefinition->replaceArgument(1, $apiConfiguration);
-/*
+
+            // TODO: Set configurable
             $serviceDefinition->addMethodCall('setCacher', array(
-                new Reference('da_api_client.http_cacher'))
-            );
-*/
+                new Reference('doctrine_cache.providers.da_api_client')
+            ));
             $serviceDefinition->addMethodCall('setLogger', array(
-                new Reference('da_api_client.http_logger'))
-            );
+                new Reference('da_api_client.http_logger')
+            ));
+
             $serviceDefinition->addTag('da_api_client.api');
             $container->setDefinition(
                 sprintf('da_api_client.api.%s', $apiName),
