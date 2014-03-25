@@ -11,6 +11,7 @@
 
 namespace Da\ApiClientBundle\Http\Transport;
 
+use Doctrine\Common\Cache\Cache;
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 use Da\ApiClientBundle\Http\Response;
 
@@ -28,9 +29,9 @@ class CurlHttpTransport extends AbstractHttpTransport
     /**
      * {@inheritdoc}
      */
-    public function __construct(HttpLoggerInterface $logger = null)
+    public function __construct(Cache $cacher = null, HttpLoggerInterface $logger = null)
     {
-        parent::__construct($logger);
+        parent::__construct($cacher, $logger);
 
         $this->cUrl = curl_init();
         $this

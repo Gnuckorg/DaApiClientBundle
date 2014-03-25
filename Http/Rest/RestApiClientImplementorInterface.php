@@ -12,7 +12,7 @@
 namespace Da\ApiClientBundle\Http\Rest;
 
 use Da\AuthCommonBundle\Security\AuthorizationRefresherInterface;
-use Da\ApiClientBundle\Cacher\HttpCacherInterface;
+use Doctrine\Common\Cache\Cache;
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 
 /**
@@ -59,18 +59,18 @@ interface RestApiClientImplementorInterface extends RestApiClientInterface
     /**
      * Get the api cacher
      *
-     * @return HttpCacherInterface|null.
+     * @return Cache|null.
      */
     public function getCacher();
 
     /**
      * Set the cacher to cache rest api request
      *
-     * @param HttpCacherInterface $cacher The cacher to cache rest api
+     * @param Cache $cacher The cacher to cache rest api
      *
      * @return RestApiClientImplementorInterface.
      */
-    public function setCacher(HttpCacherInterface $cacher);
+    public function setCacher(Cache $cacher);
 
     /**
      * Is cache enabled

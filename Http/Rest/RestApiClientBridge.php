@@ -11,7 +11,7 @@
 
 namespace Da\ApiClientBundle\Http\Rest;
 
-use Da\ApiClientBundle\Cacher\HttpCacherInterface;
+use Doctrine\Common\Cache\Cache;
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 
 /**
@@ -51,23 +51,31 @@ class RestApiClientBridge implements RestApiClientInterface
     }
 
     /**
-     * Set cacher
+     * Set the cacher to cache rest api request
      *
-     * @param HttpCacherInterface $cacher
+     * @param Cache $cacher The cacher to cache rest api
+     *
+     * @return RestApiClientInterface.
      */
     public function setCacher($cacher)
     {
         $this->implementor->setCacher($cacher);
+
+        return $this;
     }
 
     /**
-     * Set logger
+     * Set the logger to log rest api request
      *
-     * @param HttpLoggerInterface $logger
+     * @param HttpLoggerInterface $logger The logger to log rest api
+     *
+     * @return RestApiClientInterface.
      */
     public function setLogger($logger)
     {
         $this->implementor->setLogger($logger);
+
+        return $this;
     }
 
     /**

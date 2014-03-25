@@ -11,8 +11,8 @@
 
 namespace Da\ApiClientBundle\Http\Rest;
 
+use Doctrine\Common\Cache\Cache;
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
-use Da\ApiClientBundle\Cacher\HttpCacherInterface;
 
 /**
  * AbstractRestApiClientImplementor is an abstract class helping to 
@@ -41,7 +41,7 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     /**
      * The Cacher.
      *
-     * @var HttpCacherInterface
+     * @var Cache
      */
     protected $cacher;
 
@@ -125,7 +125,7 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     /**
      * {@inheritdoc}
      */
-    public function setCacher(HttpCacherInterface $cacher)
+    public function setCacher(Cache $cacher)
     {
         $this->cacher = $cacher;
 

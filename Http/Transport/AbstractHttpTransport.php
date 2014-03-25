@@ -11,6 +11,7 @@
 
 namespace Da\ApiClientBundle\Http\Transport;
 
+use Doctrine\Common\Cache\Cache;
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 use Da\ApiClientBundle\Exception\ApiHttpResponseException;
 
@@ -28,14 +29,24 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
     protected $queryStrings;
     protected $links;
     protected $headers;
+    protected $cacher;
     protected $logger;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(HttpLoggerInterface $logger = null)
+    public function __construct(Cache $cacher = null, HttpLoggerInterface $logger = null)
     {
+        $this->cacher = $cacher;
         $this->logger = $logger;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCacher()
+    {
+        return $this->cacher;
     }
 
     /**

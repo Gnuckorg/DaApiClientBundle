@@ -11,6 +11,7 @@
 
 namespace Da\ApiClientBundle\Http\Transport;
 
+use Doctrine\Common\Cache\Cache;
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 use Da\ApiClientBundle\Exception\UndefinedTransportException;
 
@@ -25,10 +26,11 @@ abstract class HttpTransportFactory
      * Build
      *
      * @param  string                 $transportName
+     * @param  Cache                  $cache
      * @param  HttpLoggerInterface    $logger
      * @return HttpTransportInterface
      */
-    public static function build($transportName, HttpLoggerInterface $logger = null)
+    public static function build($transportName, Cache $cache = null, HttpLoggerInterface $logger = null)
     {
         $className = sprintf(
             'Da\ApiClientBundle\Http\Transport\%sHttpTransport',
@@ -39,6 +41,6 @@ abstract class HttpTransportFactory
             throw new UndefinedTransportException($className);
         }
 
-        return new $className($logger);
+        return new $className($cache, $logger);
     }
 }

@@ -11,6 +11,7 @@
 
 namespace Da\ApiClientBundle\Http\Transport;
 
+use Doctrine\Common\Cache\Cache;
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 
 /**
@@ -23,9 +24,17 @@ interface HttpTransportInterface
     /**
      * Constructor
      *
+     * @param Cache $cache
      * @param HttpLoggerInterface $logger
      */
-    public function __construct(HttpLoggerInterface $logger = null);
+    public function __construct(Cache $cacher = null, HttpLoggerInterface $logger = null);
+
+    /**
+     * Get the cacher
+     *
+     * @return Cache
+     */
+    public function getCacher();
 
     /**
      * Get the logger

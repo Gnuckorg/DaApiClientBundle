@@ -13,7 +13,6 @@ namespace Da\ApiClientBundle\Http\Rest;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 use Da\ApiClientBundle\Http\Transport\HttpTransportFactory;
 use Da\AuthCommonBundle\Exception\ApiHttpResponseException;
 
@@ -89,7 +88,11 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     public function get($path, array $queryString = array(), array $headers = array())
     {
         $path = self::addQueryString($path, $queryString);
-        $transport = HttpTransportFactory::build('curl', $this->getLogger());
+        $transport = HttpTransportFactory::build(
+            'curl',
+            $this->getCacher(),
+            $this->getLogger()
+        );
 
         return $transport
             ->setMethod('GET')
@@ -105,7 +108,11 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function post($path, array $queryString = array(), array $headers = array())
     {
-        $transport = HttpTransportFactory::build('curl', $this->getLogger());
+        $transport = HttpTransportFactory::build(
+            'curl',
+            $this->getCacher(),
+            $this->getLogger()
+        );
 
         return $transport
             ->setMethod('POST')
@@ -121,7 +128,11 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function put($path, array $queryString = array(), array $headers = array())
     {
-        $transport = HttpTransportFactory::build('curl', $this->getLogger());
+        $transport = HttpTransportFactory::build(
+            'curl',
+            $this->getCacher(),
+            $this->getLogger()
+        );
 
         return $transport
             ->setMethod('PUT')
@@ -137,7 +148,11 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function delete($path, array $queryString = array(), array $headers = array())
     {
-        $transport = HttpTransportFactory::build('curl', $this->getLogger());
+        $transport = HttpTransportFactory::build(
+            'curl',
+            $this->getCacher(),
+            $this->getLogger()
+        );
 
         return $transport
             ->setMethod('DELETE')
@@ -153,7 +168,11 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function link($path, array $links, array $headers = array())
     {
-        $transport = HttpTransportFactory::build('curl', $this->getLogger());
+        $transport = HttpTransportFactory::build(
+            'curl',
+            $this->getCacher(),
+            $this->getLogger()
+        );
 
         return $transport
             ->setMethod('LINK')
@@ -169,7 +188,11 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function unlink($path, array $links, array $headers = array())
     {
-        $transport = HttpTransportFactory::build('curl', $this->getLogger());
+        $transport = HttpTransportFactory::build(
+            'curl',
+            $this->getCacher(),
+            $this->getLogger()
+        );
 
         return $transport
             ->setMethod('UNLINK')
