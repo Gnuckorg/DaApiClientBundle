@@ -7,9 +7,6 @@ DaApiClientBundle is a Symfony2's bundle allowing to discuss in a simple and sec
 Installation
 ------------
 
-Installation is a quick 2 steps process.
-
-
 ### Step 1: Add in composer
 
 Add the bundle in the composer.json file:
@@ -31,7 +28,6 @@ composer update      # WIN
 composer.phar update # LINUX
 ```
 
-
 ### Step 2: Declare in the kernel
 
 Declare the bundle in your kernel:
@@ -43,6 +39,26 @@ $bundles = array(
     // ...
     new Da\ApiClientBundle\DaApiClientBundle(),
 );
+```
+
+### Step 3: Include the configuration
+
+Import the bundle configuration in your `app/config/config.yml`
+
+```yml
+imports:
+    ...
+    - { resource: @DaApiClientBundle/Resources/config/config.yml }
+```
+
+### Step 4: Setup the developpement environement
+
+In order to profile api logs enabled it your `app/config/config_dev.yml`
+
+```yml
+...
+da_api_client:
+    log_enabled: true
 ```
 
 
@@ -83,9 +99,9 @@ You can use all basic REST methods in the same way:
 
 ```php
 $friends = $api->get('/friends', array(...));
-$friend = $api->post('/friends/add', array(...));
-$friend = $api->put('/friends/update', array(...));
-$status = $api->delete('/friends/remove', array(...));
+$friend  = $api->post('/friends/add', array(...));
+$friend  = $api->put('/friends/update', array(...));
+$status  = $api->delete('/friends/remove', array(...));
 ```
 
 
