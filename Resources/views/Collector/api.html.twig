@@ -63,7 +63,8 @@
                         <strong>Request Headers</strong>: {{ query.requestHeaders }}<br />
                         <strong>Request Query String</strong>: {{ query.requestQueryString }}<br />
                         <strong>Reponse Code</strong>: {{ query.responseCode }}<br />
-                        <strong>Time</strong>: {{ '%0.2f'|format(query.executionMS) }} ms
+                        <strong>Time</strong>: {{ '%0.2f'|format(query.executionMS) }} ms<br />
+                        <strong>Cache</strong>: {% if query.isCached %}hit ({{ query.cacheLifetime }}){% else %}miss{% endif %}
                     </small>
                 </div>
             </li>

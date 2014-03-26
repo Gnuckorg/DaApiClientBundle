@@ -11,9 +11,11 @@
 
 namespace Da\ApiClientBundle\Http\Transport;
 
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Doctrine\Common\Cache\Cache;
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 use Da\ApiClientBundle\Exception\ApiHttpResponseException;
+use Da\ApiClientBundle\Http\Response;
 
 /**
  * AbstractHttpTransport
@@ -190,6 +192,8 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
      */
     public function send()
     {
+        $isCached = false;
+        $cacheLifetime = null;
         $queryId = null;
         if ($this->getLogger()) {
             $queryId = $this->getLogger()->startQuery(
@@ -200,17 +204,37 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
             );
         }
 
-        $response = $this
-            ->buildRequest()
-            ->executeRequest()
-        ;
+        $response = false;
+        if ($this->getCacher()) {
+            $response = $this->getCacher()->fetch($this->getHash());
+        }
+
+        if (!$response) {
+            $response = $this
+                ->buildRequest()
+                ->executeRequest()
+            ;
+        } else {
+            $isCached = true;
+            $cacheLifetime = $this->getCacheLifetime($response->headers);
+        }
+
+        if ($this->getCacher() &&
+            $this->isRequestCachable($response) &&
+            ! $this->getCacher()->contains($this->getHash())
+        ) {
+            $cacheLifetime = $this->getCacheLifetime($response->headers);
+            $this->getCacher()->save($this->getHash(), $response, $cacheLifetime);
+        }
 
         if (null !== $queryId) {
             $this->getLogger()->stopQuery(
                 $queryId,
                 $response->getStatusCode(),
                 $response->headers->all(),
-                $response->getContent()
+                $response->getContent(),
+                $isCached,
+                $cacheLifetime
             );
         }
 
@@ -226,6 +250,55 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
     }
 
     /**
+     * Get a Hash which identify the request
+     *
+     * @return string
+     */
+    protected function getHash()
+    {
+        return md5(sprintf('%s %s %s %s',
+            $this->getMethod(),
+            $this->getPath(),
+            json_encode($this->getHeaders()),
+            json_encode($this->getQueryStrings())
+        ));
+    }
+
+    /**
+     * Check if the request is cachable following to the RFC2616
+     * https://www.ietf.org/rfc/rfc2616.txt
+     *
+     * @param  Response $response
+     * @return boolean
+     */
+    protected function isRequestCachable(Response $response)
+    {
+        if (!in_array($this->getMethod(), array('GET', 'HEAD'))) {
+            return false;
+        }
+/*
+        if ($response->headers->hasCacheControlDirective('no-cache') ||
+            'no-cache' == $this->headers->get('Pragma')
+        ) {
+            return false;
+        }
+*/
+        return true;
+    }
+
+    /**
+     * Get the cache lifetime based on the response headers
+     *
+     * @param  ResponseHeaderBag $headers
+     * @return integer
+     */
+    protected function getCacheLifetime(ResponseHeaderBag $headers)
+    {
+        // TODO
+        return 60;
+    }
+
+    /**
      * Build the http request
      *
      * @return AbstractHttpTransport
@@ -235,8 +308,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
     /**
      * Execute the http Request
      *
-     * @return Da\ApiClientBundle\Http\Response
+     * @return Response
      */
     abstract protected function executeRequest();
-
 }

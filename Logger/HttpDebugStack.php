@@ -69,7 +69,9 @@ class HttpDebugStack implements HttpLoggerInterface
             'executionMS'        => 0,
             'responseCode'       => null,
             'responseHeaders'    => null,
-            'responseContent'    => null
+            'responseContent'    => null,
+            'isCached'           => false,
+            'cacheLifetime'      => null
         );
         $this->currentQuery++;
 
@@ -79,16 +81,18 @@ class HttpDebugStack implements HttpLoggerInterface
     /**
      * {@inheritdoc}
      */
-    public function stopQuery($id, $responseCode, $responseHeaders, $responseContent)
+    public function stopQuery($id, $responseCode, $responseHeaders, $responseContent, $isCached, $cacheLifetime = null)
     {
         if (null !== $this->stopwatch) {
             $this->stopwatch->stop('da_api_client');
         }
 
-        $this->queries[$id]['executionMS'] = (microtime(true) - $this->start) * 1000;
-        $this->queries[$id]['responseCode'] = $responseCode;
+        $this->queries[$id]['executionMS']     = (microtime(true) - $this->start) * 1000;
+        $this->queries[$id]['responseCode']    = $responseCode;
         $this->queries[$id]['responseHeaders'] = json_encode($responseHeaders);
         $this->queries[$id]['responseContent'] = $responseContent;
+        $this->queries[$id]['isCached']        = $isCached;
+        $this->queries[$id]['cacheLifetime']   = $cacheLifetime;
 
         if (null !== $this->logger) {
             $this->logger->info(sprintf('DaApiClient [%s] Request', $id), array(
@@ -100,7 +104,9 @@ class HttpDebugStack implements HttpLoggerInterface
                 'requestHeaders'     => $this->queries[$id]['requestHeaders']
             ));
             $this->logger->info(sprintf('DaApiClient [%s] Response', $id), array(
-                'responseCode'       => $this->queries[$id]['responseCode']
+                'responseCode'       => $this->queries[$id]['responseCode'],
+                'isCached'           => $this->queries[$id]['isCached'],
+                'cacheLifetime'      => $this->queries[$id]['cacheLifetime']
             ));
             $this->logger->debug(sprintf('DaApiClient [%s] Response debug', $id), array(
                 'responseHeaders'    => $this->queries[$id]['responseHeaders'],

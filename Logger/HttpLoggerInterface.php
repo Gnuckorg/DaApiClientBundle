@@ -31,10 +31,12 @@ interface HttpLoggerInterface
     /**
      * Mark the last started query as stopped. This can be used for timing of queries.
      *
-     * @param int    $id              The log id to stop
-     * @param int    $responseCode    The http response code
-     * @param string $responseHeaders The http response headers
-     * @param string $responseContent The http response content
+     * @param int     $id              The log id to stop
+     * @param int     $responseCode    The http response code
+     * @param string  $responseHeaders The http response headers
+     * @param string  $responseContent The http response content
+     * @param boolean $isCached        true if the response came from the cache
+     * @param integer $cacheLifetime   The cache lifetime
      */
-    public function stopQuery($id, $responseCode, $responseHeaders, $responseContent);
+    public function stopQuery($id, $responseCode, $responseHeaders, $responseContent, $isCached, $cacheLifetime = null);
 }
