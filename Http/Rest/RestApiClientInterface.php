@@ -29,9 +29,10 @@ interface RestApiClientInterface
     /**
      * Get
      *
-     * @param string $path        The relative path to the webservice.
-     * @param array  $queryString The specific queryString to the webservice.
-     * @param array  $headers     The optionnal headers.
+     * @param string  $path        The relative path to the webservice.
+     * @param array   $queryString The specific queryString to the webservice.
+     * @param array   $headers     The optionnal headers.
+     * @param boolean $noCache     To force the request without check if a cache response exist.
      *
      * @return string
      *
