@@ -133,8 +133,9 @@ interface HttpTransportInterface
     /**
      * Send the http request
      *
+     * @param boolean $noCache
      * @return string
      * @throw ApiHttpResponseException
      */
-    public function send();
+    public function send($noCache = false);
 }

@@ -190,7 +190,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
     /**
      * {@inheritdoc}
      */
-    public function send()
+    public function send($noCache = false)
     {
         $isCached = false;
         $cacheLifetime = null;
@@ -205,7 +205,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
         }
 
         $response = false;
-        if ($this->getCacher()) {
+        if (!$noCache && $this->getCacher()) {
             $response = $this->getCacher()->fetch($this->getHash());
         }
 
@@ -276,13 +276,13 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
         if (!in_array($this->getMethod(), array('GET', 'HEAD'))) {
             return false;
         }
-/*
+
         if ($response->headers->hasCacheControlDirective('no-cache') ||
-            'no-cache' == $this->headers->get('Pragma')
+            'no-cache' == $response->headers->get('Pragma')
         ) {
             return false;
         }
-*/
+
         return true;
     }
 
@@ -294,8 +294,12 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
      */
     protected function getCacheLifetime(ResponseHeaderBag $headers)
     {
-        // TODO
-        return 60;
+        $maxAge = 0;
+        if ($headers->hasCacheControlDirective('max-age')) {
+            $maxAge = $headers->getCacheControlDirective('max-age');
+        }
+
+        return $maxAge;
     }
 
     /**

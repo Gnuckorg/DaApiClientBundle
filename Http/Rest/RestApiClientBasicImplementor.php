@@ -85,7 +85,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function get($path, array $queryString = array(), array $headers = array())
+    public function get($path, array $queryString = array(), array $headers = array(), $noCache = false)
     {
         $path = self::addQueryString($path, $queryString);
         $transport = HttpTransportFactory::build(
@@ -99,7 +99,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
             ->setPath($this->getApiEndpointPath($path))
             ->setQueryStrings($queryString)
             ->setHeaders($headers)
-            ->send()
+            ->send($noCache)
         ;
     }
 

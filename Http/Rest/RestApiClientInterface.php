@@ -37,7 +37,7 @@ interface RestApiClientInterface
      *
      * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
-    public function get($path, array $queryString = array(), array $headers = array());
+    public function get($path, array $queryString = array(), array $headers = array(), $noCache = false);
 
     /**
      * Post
