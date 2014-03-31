@@ -16,6 +16,7 @@ Add the bundle in the composer.json file:
 
 "require": {
     // ...
+    "doctrine/doctrine-cache-bundle": "~1.0",
     "da/auth-common-bundle": "dev-master",
     "da/api-client-bundle": "dev-master"
 },
@@ -37,6 +38,7 @@ Declare the bundle in your kernel:
 
 $bundles = array(
     // ...
+    new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
     new Da\ApiClientBundle\DaApiClientBundle(),
 );
 ```
