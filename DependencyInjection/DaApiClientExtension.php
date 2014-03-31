@@ -24,6 +24,9 @@ class DaApiClientExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        if (null !== $config['http_cacher']) {
+            var_dump($config['http_cacher']); die;
+        }
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
@@ -45,10 +48,11 @@ class DaApiClientExtension extends Extension
             $serviceDefinition->replaceArgument(0, new Reference($implementorId));
             $serviceDefinition->replaceArgument(1, $apiConfiguration);
 
-            // TODO: Set configurable
+/*
             $serviceDefinition->addMethodCall('setCacher', array(
-                new Reference('doctrine_cache.providers.da_api_client')
+                new Reference('da_api_client.http_cacher')
             ));
+*/
             $serviceDefinition->addMethodCall('setLogger', array(
                 new Reference('da_api_client.http_logger')
             ));

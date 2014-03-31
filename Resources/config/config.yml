@@ -1,8 +1,0 @@
-doctrine_cache:
-    providers:
-        da_api_client:
-            memcache:
-                servers:
-                    memcached01:
-                        host: localhost
-                        port: 11211

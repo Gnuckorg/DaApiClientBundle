@@ -41,17 +41,26 @@ $bundles = array(
 );
 ```
 
-### Step 3: Include the configuration
+### Step 3: Setup the cache provider (optional)
 
-Import the bundle configuration in your `app/config/config.yml`
+To setup the cache, first define a provider using doctrine_cache.
+And reference it in the da_api_client http_cacher parameters:
 
 ```yml
-imports:
-    ...
-    - { resource: @DaApiClientBundle/Resources/config/config.yml }
+doctrine_cache:
+    providers:
+        da_api_client:
+            memcache:
+                servers:
+                    memcached01:
+                        host: localhost
+                        port: 11211
+
+da_api_client:
+    http_cacher: doctrine_cache.providers.da_api_client
 ```
 
-### Step 4: Setup the developpement environement
+### Step 4: Setup the developpement environement (optional)
 
 In order to profile api logs enabled it your `app/config/config_dev.yml`
 

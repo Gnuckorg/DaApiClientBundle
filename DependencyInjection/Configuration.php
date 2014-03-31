@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('http_cacher')->defaultNull()->end()
                 ->booleanNode('log_enabled')->defaultFalse()->end()
                 ->arrayNode('api')
                     ->useAttributeAsKey('')
