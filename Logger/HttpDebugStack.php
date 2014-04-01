@@ -11,6 +11,7 @@
 
 namespace Da\ApiClientBundle\Logger;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
@@ -22,22 +23,30 @@ class HttpDebugStack implements HttpLoggerInterface
     protected $queries;
     protected $start;
     protected $currentQuery;
+    protected $container;
     protected $logger;
     protected $stopwatch;
 
     /**
      * Constructor
      *
-     * @param LoggerInterface $logger
-     * @param Stopwatch       $stopwatch
+     * @param ContainerInterface $container
      */
-    public function __construct(LoggerInterface $logger = null, Stopwatch $stopwatch = null)
+    public function __construct(ContainerInterface $container)
     {
         $this->queries = array();
         $this->start = null;
         $this->currentQuery = 0;
-        $this->logger = $logger;
-        $this->stopwatch = $stopwatch;
+        $this->logger = null;
+        $this->stopwatch = null;
+
+        if ($container->has('logger'))
+            $this->logger = $container->get('logger');
+        }
+
+        if ($container->has('debug.stopwatch'))
+            $this->stopwatch = $container->get('debug.stopwatch');
+        }
     }
 
     /**
