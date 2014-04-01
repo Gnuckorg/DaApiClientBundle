@@ -10,10 +10,10 @@ Declare an API
 
 da_api_client:
     api:
-        my_api_name:            # [Required] Api name, used to identify it in the container: 'da_api_client.api.my_api_name'
-            base_url:      ~    # [Required] The base url of your API (from which all path will be related to).
-            api_token:     ~    # [Required] An API token to authenticate your client in your API.
-            cache_enabled: true # [Optional] Use the cache feature if you activated it and the response of your API says it can be set in cache.
+        my_api_name:             # [Required] Api name, used to identify it in the container: 'da_api_client.api.my_api_name'
+            endpoint_root:  ~    # [Required] The base url of your API (from which all path will be related to).
+            security_token: ~    # [Required] An API token to authenticate your client in your API.
+            cache_enabled:  true # [Optional] Use the cache feature if you activated it and the response of your API says it can be set in cache.
             [Optional part]
             client:
                 service:     da_api_client.api             # [Optional] The API client service. Define your own to provide an easy and sharable interface to the API.
