@@ -76,8 +76,8 @@ Link your API client to a configured API
 da_api_client:
     api:
         my_api_name:
-            base_url:  'https://my-domain/api'
-            api_token: 3e90o0xrzy4gsw4k0440sw4k4g8oog0ckoo4okgogs0wowo4sg
+            endpoint_root:  'https://my-domain/api'
+            security_token: 3e90o0xrzy4gsw4k0440sw4k4g8oog0ckoo4okgogs0wowo4sg
             client:    
                 service: my_own.my_rest_api_client
 ```
@@ -110,8 +110,8 @@ Finally, you must precise it in the configuration:
 da_api_client:
     api:
         my_api_name:
-            base_url:  'https://my-domain/api'
-            api_token: 3e90o0xrzy4gsw4k0440sw4k4g8oog0ckoo4okgogs0wowo4sg
+            endpoint_root:  'https://my-domain/api'
+            security_token: 3e90o0xrzy4gsw4k0440sw4k4g8oog0ckoo4okgogs0wowo4sg
             client:    
                 service: my_own.my_rest_api_client
                 implementor: my_own.my_api_rest_client_implementor
