@@ -40,11 +40,11 @@ class HttpDebugStack implements HttpLoggerInterface
         $this->logger = null;
         $this->stopwatch = null;
 
-        if ($container->has('logger'))
+        if ($container->has('logger')) {
             $this->logger = $container->get('logger');
         }
 
-        if ($container->has('debug.stopwatch'))
+        if ($container->has('debug.stopwatch')) {
             $this->stopwatch = $container->get('debug.stopwatch');
         }
     }
