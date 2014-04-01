@@ -140,7 +140,7 @@ class Response
      * @throws \InvalidArgumentException When the HTTP status code is not valid
      *
      */
-    public function __construct($url, $content = '', $status = 200, $headers = array())
+    public function __construct($url, $content = null, $status = 200, $headers = array())
     {
         $this->headers = new ResponseHeaderBag($headers);
         $this->setUrl($url);
