@@ -14,7 +14,7 @@ da_api_client:
             endpoint_root:  ~    # [Required] The base url of your API (from which all path will be related to).
             security_token: ~    # [Required] An API token to authenticate your client in your API.
             cache_enabled:  true # [Optional] Use the cache feature if you activated it and the response of your API says it can be set in cache.
-            [Optional part]
+            # [Optional part]
             client:
                 service:     da_api_client.api             # [Optional] The API client service. Define your own to provide an easy and sharable interface to the API.
                 implementor: da_api_client.api_implementor # [Optional] The API client implementor service. Define your own if you want to change the behaviour of the communication with the API.
