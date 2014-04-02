@@ -187,6 +187,7 @@ class CurlHttpTransport extends AbstractHttpTransport
         $headerSize = curl_getinfo($this->cUrl, CURLINFO_HEADER_SIZE);
         $header = substr($response, 0, $headerSize);
         $body = substr($response, $headerSize);
+        $body = $body ? $body : null;
         curl_close($this->cUrl);
 
         return Response::create($url, $body, $code, self::parseHeaders($header));

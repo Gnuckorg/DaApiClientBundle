@@ -160,13 +160,13 @@ class Response
      *     return Response::create($body, 200)
      *         ->setSharedMaxAge(300);
      *
-     * @param string  $content The response content
-     * @param integer $status  The response status code
-     * @param array   $headers An array of response headers
+     * @param string|null $content The response content
+     * @param integer     $status  The response status code
+     * @param array       $headers An array of response headers
      *
      * @return Response
      */
-    public static function create($url, $content = '', $status = 200, $headers = array())
+    public static function create($url, $content = null, $status = 200, $headers = array())
     {
         return new static($url, $content, $status, $headers);
     }
