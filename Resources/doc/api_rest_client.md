@@ -12,8 +12,8 @@ try {
     $api = $container->get('da_api_client.api.my_rest_api_name')
     $parameters = array('offset' => 0, 'limit' => 20);
     $friends = $api->get('/friends', $parameters);
-} catch (\Da\AuthCommonBundle\Exception\ApiHttpResponseException $e) {
-    switch ($e->getStatusCode()) {
+} catch (\Da\ApiClientBundle\Exception\ApiHttpResponseException $e) {
+    switch ($e->getHttpCode()) {
         // Handle specific http error code here.
         case '404':
             // ...
