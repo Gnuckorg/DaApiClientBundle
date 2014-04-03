@@ -55,7 +55,7 @@ class DaApiClientExtension extends Extension
                 new Reference('da_api_client.http_logger')
             ));
 
-            $serviceDefinition->addTag('da_api_client.api');
+            $serviceDefinition->addTag('da_api_client.api', array('name' => $apiName));
             $container->setDefinition(
                 sprintf('da_api_client.api.%s', $apiName),
                 $serviceDefinition
