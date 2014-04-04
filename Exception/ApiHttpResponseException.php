@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 class ApiHttpResponseException  extends \RuntimeException implements HttpExceptionInterface
 {
     protected $url;
-    protected $code;
+    protected $httpCode;
     protected $headers;
     protected $body;
 
@@ -27,19 +27,19 @@ class ApiHttpResponseException  extends \RuntimeException implements HttpExcepti
      * Constructor
      *
      * @param string  $url
-     * @param integer $code
+     * @param integer $httpCode
      * @param array   $headers
      * @param string  $body
      */
-    public function __construct($url, $code, $headers, $body)
+    public function __construct($url, $httpCode, $headers, $body)
     {
-        $this->url     = $url;
-        $this->code    = $code;
-        $this->headers = $headers;
-        $this->body    = $body;
+        $this->url      = $url;
+        $this->httpCode = $httpCode;
+        $this->headers  = $headers;
+        $this->body     = $body;
 
         parent::__construct(sprintf('HTTP Api response error: (%s) %s',
-            $code,
+            $httpCode,
             $url
         ));
     }
@@ -55,13 +55,13 @@ class ApiHttpResponseException  extends \RuntimeException implements HttpExcepti
     }
 
     /**
-     * GetCode
+     * GetHttpCode
      *
      * @return integer
      */
-    public function getCode()
+    public function getHttpCode()
     {
-        return $this->code;
+        return $this->httpCode;
     }
 
     /**
@@ -79,7 +79,7 @@ class ApiHttpResponseException  extends \RuntimeException implements HttpExcepti
      */
     public function getStatusCode()
     {
-        return $this->getCode();
+        return $this->getHttpCode();
     }
 
     /**
