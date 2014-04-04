@@ -22,7 +22,7 @@ use Da\ApiClientBundle\Http\Response;
  */
 class CurlHttpTransport extends AbstractHttpTransport
 {
-    const USER_AGENT_NAME = "DaApiClient php/curl/REST-UA";
+    public static $USER_AGENT_NAME = "DaApiClient php/curl/REST-UA";
 
     protected $cUrl;
 
@@ -37,7 +37,6 @@ class CurlHttpTransport extends AbstractHttpTransport
         $this
             ->addCurlOption(CURLOPT_RETURNTRANSFER, true)
             ->addCurlOption(CURLOPT_HEADER, true)
-            ->addCurlOption(CURLOPT_USERAGENT, $this->getUserAgent())
         ;
     }
 
@@ -62,13 +61,12 @@ class CurlHttpTransport extends AbstractHttpTransport
     protected function buildRequest()
     {
         $buildRequestMethod = sprintf('build%sRequest', ucfirst(strtolower($this->getMethod())));
-        $this
-            ->addCurlOption(CURLOPT_URL, $this->getPath())
-            ->buildHeaders()
-            ->$buildRequestMethod()
-        ;
 
-        return $this;
+        return $this
+            ->addCurlOption(CURLOPT_URL, $this->getPath())
+            ->$buildRequestMethod()
+            ->buildHeaders()
+        ;
     }
 
     /**
@@ -76,13 +74,13 @@ class CurlHttpTransport extends AbstractHttpTransport
      */
     protected function buildHeaders()
     {
+        $this->addHeader('User-Agent', $this->getUserAgent());
         $headers = array();
         foreach ($this->getHeaders() as $name => $value) {
             $headers[] = sprintf('%s: %s', $name, $value);
         }
-        $this->addCurlOption(CURLOPT_HTTPHEADER, $headers);
 
-        return $this;
+        return $this->addCurlOption(CURLOPT_HTTPHEADER, $headers);
     }
 
     /**
@@ -102,12 +100,10 @@ class CurlHttpTransport extends AbstractHttpTransport
      */
     protected function buildPostRequest()
     {
-        $this
+        return $this
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_POSTFIELDS, $this->getQueryStrings())
         ;
-
-        return $this;
     }
 
     /**
@@ -117,14 +113,12 @@ class CurlHttpTransport extends AbstractHttpTransport
      */
     protected function buildPutRequest()
     {
-        $this
+        return $this
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'PUT')
             ->addCurlOption(CURLOPT_POSTFIELDS, http_build_query($this->getQueryStrings()))
             ->addHeader('X-HTTP-Method-Override', 'PUT')
         ;
-
-        return $this;
     }
 
     /**
@@ -134,14 +128,12 @@ class CurlHttpTransport extends AbstractHttpTransport
      */
     protected function buildDeleteRequest()
     {
-        $this
+        return $this
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'DELETE')
             ->addCurlOption(CURLOPT_POSTFIELDS, http_build_query($this->getQueryStrings()))
             ->addHeader('X-HTTP-Method-Override', 'DELETE')
         ;
-
-        return $this;
     }
 
     /**
@@ -151,13 +143,11 @@ class CurlHttpTransport extends AbstractHttpTransport
      */
     protected function buildLinkRequest()
     {
-        $this
+        return $this
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'LINK')
             ->addHeader('Link', implode(', ', $this->getLinks()))
             ->addHeader('X-HTTP-Method-Override', 'LINK')
         ;
-
-        return $this;
     }
 
     /**
@@ -167,13 +157,11 @@ class CurlHttpTransport extends AbstractHttpTransport
      */
     protected function buildUnlinkRequest()
     {
-        $this
+        return $this
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'UNLINK')
             ->addHeader('Link', implode(', ', $this->getLinks()))
             ->addHeader('X-HTTP-Method-Override', 'UNLINK')
         ;
-
-        return $this;
     }
 
     /**
