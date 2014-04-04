@@ -24,7 +24,7 @@ use Da\ApiClientBundle\Http\Response;
  */
 abstract class AbstractHttpTransport implements HttpTransportInterface
 {
-    const USER_AGENT_NAME = "DaApiClient php/REST-UA";
+    public static $USER_AGENT_NAME = "DaApiClient php/REST-UA";
 
     protected $method;
     protected $path;
@@ -39,8 +39,13 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
      */
     public function __construct(Cache $cacher = null, HttpLoggerInterface $logger = null)
     {
-        $this->cacher = $cacher;
-        $this->logger = $logger;
+        $this->method       = null;
+        $this->path         = null;
+        $this->queryStrings = array();
+        $this->links        = array();
+        $this->headers      = array();
+        $this->cacher       = $cacher;
+        $this->logger       = $logger;
     }
 
     /**
@@ -64,7 +69,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
      */
     public function getUserAgent()
     {
-        return self::USER_AGENT_NAME;
+        return static::$USER_AGENT_NAME;
     }
 
     /**
@@ -195,6 +200,8 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
         $isCached = false;
         $cacheLifetime = null;
         $queryId = null;
+        $this->buildRequest();
+
         if ($this->getLogger()) {
             $queryId = $this->getLogger()->startQuery(
                 $this->getMethod(),
@@ -210,10 +217,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
         }
 
         if (!$response) {
-            $response = $this
-                ->buildRequest()
-                ->executeRequest()
-            ;
+            $response = $this->executeRequest();
         } else {
             $isCached = true;
             $cacheLifetime = $this->getCacheLifetime($response->headers);
@@ -242,6 +246,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
             throw new ApiHttpResponseException(
                 $response->getUrl(),
                 $response->getStatusCode(),
+                $response->headers->all(),
                 $response->getContent()
             );
         }
