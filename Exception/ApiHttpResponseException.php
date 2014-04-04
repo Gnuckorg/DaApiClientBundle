@@ -11,31 +11,82 @@
 
 namespace Da\ApiClientBundle\Exception;
 
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
-class ApiHttpResponseException extends \Exception
+class ApiHttpResponseException  extends \RuntimeException implements HttpExceptionInterface
 {
+    protected $url;
     protected $code;
+    protected $headers;
+    protected $body;
 
-    public function __construct($url, $code, $content)
+    /**
+     * Constructor
+     *
+     * @param string  $url
+     * @param integer $code
+     * @param array   $headers
+     * @param string  $body
+     */
+    public function __construct($url, $code, $headers, $body)
     {
-        $this->code = $code;
+        $this->url     = $url;
+        $this->code    = $code;
+        $this->headers = $headers;
+        $this->body    = $body;
 
-        parent::__construct(sprintf('HTTP Api response error: (%s) %s %s',
+        parent::__construct(sprintf('HTTP Api response error: (%s) %s',
             $code,
-            $url,
-            $content
+            $url
         ));
     }
 
     /**
-     * GetHttpCode
+     * GetUrl
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * GetCode
      *
      * @return integer
      */
-    public function getHttpCode()
+    public function getCode()
     {
         return $this->code;
+    }
+
+    /**
+     * GetBody
+     *
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusCode()
+    {
+        return $this->getCode();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
     }
 }

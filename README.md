@@ -12,7 +12,6 @@ Add dependencies in your `composer.json` file:
 "require": {
     ...
     "doctrine/doctrine-cache-bundle": "~1.0",
-    "da/auth-common-bundle": "dev-master",
     "da/api-client-bundle": "dev-master"
 },
 ```

@@ -242,6 +242,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
             throw new ApiHttpResponseException(
                 $response->getUrl(),
                 $response->getStatusCode(),
+                $response->headers->all(),
                 $response->getContent()
             );
         }
