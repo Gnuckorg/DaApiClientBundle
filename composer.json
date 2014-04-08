@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
+        "php5-curl": "*",
         "symfony/dependency-injection" : ">=2.1",
         "symfony/config" : ">=2.1",
         "doctrine/doctrine-cache-bundle": "~1.0"
