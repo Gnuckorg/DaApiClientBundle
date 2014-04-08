@@ -35,9 +35,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     }
 
     /**
-     * Get the access token if it exist or null otherwise.
-     *
-     * @return string|null The access token.
+     * {@inheritdoc}
      */
     protected function getAccessToken()
     {
@@ -87,6 +85,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function get($path, array $queryString = array(), array $headers = array(), $noCache = false)
     {
+        $headers = $this->initHeaders($headers);
         $path = self::addQueryString($path, $queryString);
         $transport = HttpTransportFactory::build(
             'curl',
@@ -108,6 +107,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function post($path, array $queryString = array(), array $headers = array())
     {
+        $headers = $this->initHeaders($headers);
         $transport = HttpTransportFactory::build(
             'curl',
             $this->getCacher(),
@@ -128,6 +128,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function put($path, array $queryString = array(), array $headers = array())
     {
+        $headers = $this->initHeaders($headers);
         $transport = HttpTransportFactory::build(
             'curl',
             $this->getCacher(),
@@ -148,6 +149,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function delete($path, array $queryString = array(), array $headers = array())
     {
+        $headers = $this->initHeaders($headers);
         $transport = HttpTransportFactory::build(
             'curl',
             $this->getCacher(),
@@ -168,6 +170,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function link($path, array $links, array $headers = array())
     {
+        $headers = $this->initHeaders($headers);
         $transport = HttpTransportFactory::build(
             'curl',
             $this->getCacher(),
@@ -188,6 +191,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function unlink($path, array $links, array $headers = array())
     {
+        $headers = $this->initHeaders($headers);
         $transport = HttpTransportFactory::build(
             'curl',
             $this->getCacher(),
@@ -215,22 +219,5 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
             $this->getEndpointRoot(),
             $path
         );
-    }
-
-    /**
-     * Add the security tokens
-     */
-    protected function addSecurityTokens()
-    {
-        // API token.
-        if($this->hasSecurityToken()) {
-            $this->setHeader('X-API-Security-Token', $this->getSecurityToken());
-        }
-
-        // Access token (oauth).
-        $accessToken = $this->getAccessToken();
-        if ($accessToken) {
-            $this->setHeader('Authorization', sprintf('Bearer %s', $accessToken));
-        }
     }
 }

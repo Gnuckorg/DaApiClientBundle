@@ -189,4 +189,33 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
 
         return $this;
     }
+
+    /**
+     * Init headers
+     *
+     * @param array $headers
+     * @return array
+     */
+    protected function initHeaders(array $headers = array())
+    {
+        // API token.
+        if ($this->hasSecurityToken()) {
+            $headers['X-API-Security-Token'] = $this->getSecurityToken();
+        }
+
+        // Access token (oauth).
+        $accessToken = $this->getAccessToken();
+        if ($accessToken) {
+            $headers['Authorization'] = sprintf('Bearer %s', $accessToken);
+        }
+
+        return $headers;
+    }
+
+    /**
+     * Get the access token if exist, null otherwise.
+     *
+     * @return string|null The access token.
+     */
+    abstract protected function getAccessToken();
 }
