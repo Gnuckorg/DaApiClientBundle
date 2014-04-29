@@ -122,6 +122,21 @@ class CurlHttpTransport extends AbstractHttpTransport
     }
 
     /**
+     * Build patch request
+     *
+     * @return CurlTransport
+     */
+    protected function buildPatchRequest()
+    {
+        return $this
+            ->addCurlOption(CURLOPT_POST, true)
+            ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'PATCH')
+            ->addCurlOption(CURLOPT_POSTFIELDS, http_build_query($this->getQueryStrings()))
+            ->addHeader('X-HTTP-Method-Override', 'PATCH')
+        ;
+    }
+
+    /**
      * Build delete request
      *
      * @return CurlTransport

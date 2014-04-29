@@ -113,6 +113,14 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
+    public function patch($path, array $queryString = array(), array $headers = array())
+    {
+        return $this->implementor->patch($path, $queryString, $headers);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function delete($path, array $queryString = array(), array $headers = array())
     {
         return $this->implementor->delete($path, $queryString, $headers);

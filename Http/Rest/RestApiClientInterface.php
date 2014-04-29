@@ -67,6 +67,19 @@ interface RestApiClientInterface
     public function put($path, array $queryString = array(), array $headers = array());
 
     /**
+     * Patch
+     *
+     * @param string $path        The relative path to the webservice.
+     * @param array  $queryString The specific queryString to the webservice.
+     * @param array  $headers     The optionnal headers.
+     *
+     * @return string
+     *
+     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
+     */
+    public function patch($path, array $queryString = array(), array $headers = array());
+
+    /**
      * Delete
      *
      * @param string $path        The relative path to the webservice.

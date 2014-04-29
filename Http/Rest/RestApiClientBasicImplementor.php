@@ -147,6 +147,27 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
+    public function patch($path, array $queryString = array(), array $headers = array())
+    {
+        $headers = $this->initHeaders($headers);
+        $transport = HttpTransportFactory::build(
+            'curl',
+            $this->getCacher(),
+            $this->getLogger()
+        );
+
+        return $transport
+            ->setMethod('PATCH')
+            ->setPath($this->getApiEndpointPath($path))
+            ->setQueryStrings($queryString)
+            ->setHeaders($headers)
+            ->send()
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function delete($path, array $queryString = array(), array $headers = array())
     {
         $headers = $this->initHeaders($headers);
