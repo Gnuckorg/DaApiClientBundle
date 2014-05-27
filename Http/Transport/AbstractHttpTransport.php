@@ -251,7 +251,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
             );
         }
 
-        return $response->getContent();
+        return $response;
     }
 
     /**

@@ -141,4 +141,5 @@ class RestApiClientBridge implements RestApiClientInterface
     {
         return $this->implementor->unlink($path, $links, $headers);
     }
+
 }

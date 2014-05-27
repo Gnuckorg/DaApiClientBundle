@@ -34,7 +34,7 @@ interface RestApiClientInterface
      * @param array   $headers     The optionnal headers.
      * @param boolean $noCache     To force the request without check if a cache response exist.
      *
-     * @return string
+     * @return Da\ApiClientBundle\Http\Response
      *
      * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
