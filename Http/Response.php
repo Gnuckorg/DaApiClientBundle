@@ -239,7 +239,8 @@ class Response
     /**
      * Gets the current response content.
      *
-     * @return string Content
+     * @param  boolean $decode
+     * @return string | array
      */
     public function getContent($decode = false)
     {

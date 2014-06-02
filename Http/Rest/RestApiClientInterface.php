@@ -29,16 +29,17 @@ interface RestApiClientInterface
     /**
      * Get
      *
-     * @param string  $path        The relative path to the webservice.
-     * @param array   $queryString The specific queryString to the webservice.
-     * @param array   $headers     The optionnal headers.
-     * @param boolean $noCache     To force the request without check if a cache response exist.
+     * @param string  $path         The relative path to the webservice.
+     * @param array   $queryString  The specific queryString to the webservice.
+     * @param array   $headers      The optionnal headers.
+     * @param boolean $noCache      To force the request without check if a cache response exist.
+     * @param boolean $absolutePath To use absolute path instead of build it with api endpoint.
      *
      * @return Da\ApiClientBundle\Http\Response
      *
      * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
      */
-    public function get($path, array $queryString = array(), array $headers = array(), $noCache = false);
+    public function get($path, array $queryString = array(), array $headers = array(), $noCache = false, $absolutePath = false);
 
     /**
      * Post
