@@ -263,7 +263,7 @@ class Response
             return json_decode($this->content, true);
         }
 
-        if($headers['content-type'][0] === 'text/xml') {
+        if($headers['content-type'][0] === 'text/xml' || $headers['content-type'][0] === 'text/xml; charset=UTF-8') {
             $xml = simplexml_load_string($this->content);
             $json = json_encode($xml);
 
