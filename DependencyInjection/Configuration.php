@@ -28,7 +28,7 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('')
                     ->prototype('array')
                         ->children()
-                            ->scalarNode('endpoint_root')->isRequired(true)->end()
+                            ->scalarNode('endpoint_root')->defaultNull()->end()
                             ->scalarNode('security_token')->defaultNull()->end()
                             ->booleanNode('cache_enabled')->defaultTrue()->end()
                             ->arrayNode('client')

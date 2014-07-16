@@ -134,7 +134,7 @@ interface HttpTransportInterface
      * Send the http request
      *
      * @param boolean $noCache
-     * @return string
+     * @return Da\ApiClientBundle\Http\Response
      * @throw ApiHttpResponseException
      */
     public function send($noCache = false);

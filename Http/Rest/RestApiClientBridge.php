@@ -89,9 +89,9 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
-    public function get($path, array $queryString = array(), array $headers = array(), $noCache = false)
+    public function get($path, array $queryString = array(), array $headers = array(), $noCache = false, $absolutePath = false)
     {
-        return $this->implementor->get($path, $queryString, $headers, $noCache);
+        return $this->implementor->get($path, $queryString, $headers, $noCache, $absolutePath);
     }
 
     /**
@@ -141,4 +141,5 @@ class RestApiClientBridge implements RestApiClientInterface
     {
         return $this->implementor->unlink($path, $links, $headers);
     }
+
 }

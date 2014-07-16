@@ -239,10 +239,37 @@ class Response
     /**
      * Gets the current response content.
      *
-     * @return string Content
+     * @param  boolean $decode
+     * @return string | array
      */
-    public function getContent()
+    public function getContent($decode = false)
     {
+        if(!$decode) {
+            return $this->content;
+        }
+
+        return $this->decodeContent();
+    }
+
+    /**
+     * Decode the content
+     *
+     * @return array Content
+     */
+    public function decodeContent()
+    {
+        $headers = $this->headers->all();
+        if($headers['content-type'][0] === 'application/json') {
+            return json_decode($this->content, true);
+        }
+
+        if($headers['content-type'][0] === 'text/xml' || $headers['content-type'][0] === 'text/xml; charset=UTF-8') {
+            $xml = simplexml_load_string($this->content);
+            $json = json_encode($xml);
+
+            return json_decode($json, true);
+        }
+
         return $this->content;
     }
 

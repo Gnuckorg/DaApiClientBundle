@@ -83,7 +83,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function get($path, array $queryString = array(), array $headers = array(), $noCache = false)
+    public function get($path, array $queryString = array(), array $headers = array(), $noCache = false, $absolutePath = false)
     {
         $headers = $this->initHeaders($headers);
         $path = self::addQueryString($path, $queryString);
@@ -93,9 +93,13 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
             $this->getLogger()
         );
 
+        if(!$absolutePath) {
+            $path = $this->getApiEndpointPath($path);
+        }
+
         return $transport
             ->setMethod('GET')
-            ->setPath($this->getApiEndpointPath($path))
+            ->setPath($path)
             ->setQueryStrings($queryString)
             ->setHeaders($headers)
             ->send($noCache)
