@@ -99,7 +99,7 @@ class HttpDebugStack implements HttpLoggerInterface
         $this->queries[$id]['executionMS']     = (microtime(true) - $this->start) * 1000;
         $this->queries[$id]['responseCode']    = $responseCode;
         $this->queries[$id]['responseHeaders'] = json_encode($responseHeaders);
-        $this->queries[$id]['responseContent'] = htmlspecialchars($responseContent);
+        $this->queries[$id]['responseContent'] = $responseContent;
         $this->queries[$id]['isCached']        = $isCached;
         $this->queries[$id]['cacheLifetime']   = $cacheLifetime;
 
