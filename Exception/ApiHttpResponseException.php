@@ -11,12 +11,10 @@
 
 namespace Da\ApiClientBundle\Exception;
 
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-
 /**
  * @author Gabriel Bondaz <gabriel.bondaz@idci-consulting.fr>
  */
-class ApiHttpResponseException  extends \RuntimeException implements HttpExceptionInterface
+class ApiHttpResponseException extends \Exception
 {
     protected $url;
     protected $httpCode;
