@@ -85,25 +85,9 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function get($path, array $queryString = array(), array $headers = array(), $noCache = false, $absolutePath = false)
     {
-        $headers = $this->initHeaders($headers);
         $path = self::addQueryString($path, $queryString);
-        $transport = HttpTransportFactory::build(
-            'curl',
-            $this->getCacher(),
-            $this->getLogger()
-        );
 
-        if(!$absolutePath) {
-            $path = $this->getApiEndpointPath($path);
-        }
-
-        return $transport
-            ->setMethod('GET')
-            ->setPath($path)
-            ->setQueryStrings($queryString)
-            ->setHeaders($headers)
-            ->send($noCache)
-        ;
+        return $this->send('GET', $path, $headers, $queryString, null, $noCache, $absolutePath);
     }
 
     /**
@@ -111,20 +95,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function post($path, array $queryString = array(), array $headers = array())
     {
-        $headers = $this->initHeaders($headers);
-        $transport = HttpTransportFactory::build(
-            'curl',
-            $this->getCacher(),
-            $this->getLogger()
-        );
-
-        return $transport
-            ->setMethod('POST')
-            ->setPath($this->getApiEndpointPath($path))
-            ->setQueryStrings($queryString)
-            ->setHeaders($headers)
-            ->send()
-        ;
+        return $this->send('POST', $path, $headers, $queryString);
     }
 
     /**
@@ -132,20 +103,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function put($path, array $queryString = array(), array $headers = array())
     {
-        $headers = $this->initHeaders($headers);
-        $transport = HttpTransportFactory::build(
-            'curl',
-            $this->getCacher(),
-            $this->getLogger()
-        );
-
-        return $transport
-            ->setMethod('PUT')
-            ->setPath($this->getApiEndpointPath($path))
-            ->setQueryStrings($queryString)
-            ->setHeaders($headers)
-            ->send()
-        ;
+        return $this->send('PUT', $path, $headers, $queryString);
     }
 
     /**
@@ -153,20 +111,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function patch($path, array $queryString = array(), array $headers = array())
     {
-        $headers = $this->initHeaders($headers);
-        $transport = HttpTransportFactory::build(
-            'curl',
-            $this->getCacher(),
-            $this->getLogger()
-        );
-
-        return $transport
-            ->setMethod('PATCH')
-            ->setPath($this->getApiEndpointPath($path))
-            ->setQueryStrings($queryString)
-            ->setHeaders($headers)
-            ->send()
-        ;
+        return $this->send('PATCH', $path, $headers, $queryString);
     }
 
     /**
@@ -174,20 +119,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function delete($path, array $queryString = array(), array $headers = array())
     {
-        $headers = $this->initHeaders($headers);
-        $transport = HttpTransportFactory::build(
-            'curl',
-            $this->getCacher(),
-            $this->getLogger()
-        );
-
-        return $transport
-            ->setMethod('DELETE')
-            ->setPath($this->getApiEndpointPath($path))
-            ->setQueryStrings($queryString)
-            ->setHeaders($headers)
-            ->send()
-        ;
+        return $this->send('DELETE', $path, $headers, $queryString);
     }
 
     /**
@@ -195,26 +127,41 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
      */
     public function link($path, array $links, array $headers = array())
     {
-        $headers = $this->initHeaders($headers);
-        $transport = HttpTransportFactory::build(
-            'curl',
-            $this->getCacher(),
-            $this->getLogger()
-        );
-
-        return $transport
-            ->setMethod('LINK')
-            ->setPath($this->getApiEndpointPath($path))
-            ->setLinks($links)
-            ->setHeaders($headers)
-            ->send()
-        ;
+        return $this->send('LINK', $path, $headers, null, $links);
     }
 
     /**
      * {@inheritdoc}
      */
     public function unlink($path, array $links, array $headers = array())
+    {
+        return $this->send('UNLINK', $path, $headers, null, $links);
+    }
+
+    /**
+     * Send a request to an API.
+     *
+     * @param string  $method      The HTTP method.
+     * @param string  $path        The relative path to the webservice.
+     * @param array   $headers     The optionnal headers.
+     * @param array   $queryString The specific queryString to the webservice.
+     * @param array   $links       Array of resources to link.
+     * @param boolean $noCache      To force the request without check if a cache response exist.
+     * @param boolean $absolutePath To use absolute path instead of build it with api endpoint.
+     *
+     * @return Da\ApiClientBundle\Http\Response
+     *
+     * @throws ApiHttpResponseException
+     */
+    protected function send(
+        $method,
+        $path,
+        array $headers = array(),
+        array $queryString = null,
+        array $links = null,
+        $noCache = false,
+        $absolutePath = false
+    )
     {
         $headers = $this->initHeaders($headers);
         $transport = HttpTransportFactory::build(
@@ -223,13 +170,41 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
             $this->getLogger()
         );
 
-        return $transport
-            ->setMethod('UNLINK')
-            ->setPath($this->getApiEndpointPath($path))
-            ->setLinks($links)
+        if (!$absolutePath) {
+            $path = $this->getApiEndpointPath($path);
+        }
+
+        $transport
+            ->setMethod($method)
+            ->setPath($path)
             ->setHeaders($headers)
-            ->send()
         ;
+
+        if ($queryString) {
+            $transport->setQueryStrings($queryString);
+        }
+        if ($links) {
+            $transport->setLinks($links);
+        }
+
+        try {
+            $response = $transport->send();
+        } catch (ApiHttpResponseException $exception) {
+            if (
+                401 === $exception->getStatusCode() &&
+                $this->container->has('da_oauth_client.authorization_refresher.oauth')
+            ) {
+                // Try to refresh the access token.
+                $oauthRefresher = $this->container->get('da_oauth_client.authorization_refresher.oauth');
+                $oauthRefresher->refresh();
+
+                $response = $transport->send();
+            } else {
+                throw $exception;
+            }
+        }
+
+        return $response;
     }
 
     /**
