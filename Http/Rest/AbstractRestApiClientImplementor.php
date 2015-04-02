@@ -15,7 +15,7 @@ use Doctrine\Common\Cache\Cache;
 use Da\ApiClientBundle\Logger\HttpLoggerInterface;
 
 /**
- * AbstractRestApiClientImplementor is an abstract class helping to 
+ * AbstractRestApiClientImplementor is an abstract class helping to
  * define your own implementor with a basic implementation for some methods
  * of the RestApiClientImplementorInterface interface.
  *
@@ -35,7 +35,7 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
      * The security token.
      *
      * @var string
-     */ 
+     */
     protected $securityToken;
 
     /**
@@ -199,7 +199,7 @@ abstract class AbstractRestApiClientImplementor implements RestApiClientImplemen
     protected function initHeaders(array $headers = array())
     {
         // API token.
-        if ($this->hasSecurityToken()) {
+        if ($this->hasSecurityToken() && !isset($headers['X-API-Security-Token'])) {
             $headers['X-API-Security-Token'] = $this->getSecurityToken();
         }
 
