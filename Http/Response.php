@@ -259,7 +259,7 @@ class Response
     public function decodeContent()
     {
         $headers = $this->headers->all();
-        if($headers['content-type'][0] === 'application/json') {
+        if($headers['content-type'][0] === 'application/json' || $headers['content-type'][0] === 'application/json; charset=UTF-8') {
             return json_decode($this->content, true);
         }
 
