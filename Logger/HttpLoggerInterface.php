@@ -19,14 +19,14 @@ interface HttpLoggerInterface
     /**
      * Logs a REST Api statement somewhere.
      *
-     * @param string $requestMethod      The http request method to use
-     * @param string $requestUrl         The http request enpoint to call
-     * @param array  $requestHeaders     The http request headers.
-     * @param array  $requestQueryString The http request query string
+     * @param string       $requestMethod      The http request method to use
+     * @param string       $requestUrl         The http request enpoint to call
+     * @param array        $requestHeaders     The http request headers.
+     * @param string|array $requestQueryString The http request query string
      *
      * @return int a log id
      */
-    public function startQuery($requestMethod, $requestUrl, array $requestHeaders = array(), array $requestQueryString = array());
+    public function startQuery($requestMethod, $requestUrl, array $requestHeaders = array(), $requestQueryString);
 
     /**
      * Mark the last started query as stopped. This can be used for timing of queries.

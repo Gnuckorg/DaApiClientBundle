@@ -28,7 +28,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
 
     protected $method;
     protected $path;
-    protected $queryStrings;
+    protected $queryString;
     protected $links;
     protected $headers;
     protected $cacher;
@@ -39,13 +39,13 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
      */
     public function __construct(Cache $cacher = null, HttpLoggerInterface $logger = null)
     {
-        $this->method       = null;
-        $this->path         = null;
-        $this->queryStrings = array();
-        $this->links        = array();
-        $this->headers      = array();
-        $this->cacher       = $cacher;
-        $this->logger       = $logger;
+        $this->method      = null;
+        $this->path        = null;
+        $this->queryString = null;
+        $this->links       = array();
+        $this->headers     = array();
+        $this->cacher      = $cacher;
+        $this->logger      = $logger;
     }
 
     /**
@@ -111,27 +111,17 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
     /**
      * {@inheritdoc}
      */
-    public function getQueryStrings()
+    public function getQueryString()
     {
-        return $this->queryStrings;
+        return $this->queryString;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setQueryStrings($queryStrings)
+    public function setQueryString($queryString)
     {
-        $this->queryStrings = $queryStrings;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addQueryString($name, $value)
-    {
-        $this->queryStrings[$name] = $value;
+        $this->queryString = $queryString;
 
         return $this;
     }
@@ -207,7 +197,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
                 $this->getMethod(),
                 $this->getPath(),
                 $this->getHeaders(),
-                $this->getQueryStrings()
+                $this->getQueryString()
             );
         }
 
@@ -265,7 +255,7 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
             $this->getMethod(),
             $this->getPath(),
             json_encode($this->getHeaders()),
-            json_encode($this->getQueryStrings())
+            json_encode($this->getQueryString())
         ));
     }
 

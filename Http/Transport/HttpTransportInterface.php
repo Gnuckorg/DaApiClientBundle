@@ -81,29 +81,19 @@ interface HttpTransportInterface
     public function setPath($path);
 
     /**
-     * Get http query strings
+     * Get http query string
      *
      * @return array
      */
-    public function getQueryStrings();
+    public function getQueryString();
 
     /**
-     * Set http query strings
+     * Set http query string
      *
-     * @param array $queryStrings
+     * @param array $queryString
      * @return HttpTransportInterface
      */
-    public function setQueryStrings($queryStrings);
-
-    /**
-     * Add a http query string to the request
-     *
-     * @param string $name
-     * @param string $value
-     *
-     * @return HttpTransportInterface
-     */
-    public function addQueryString($name, $value);
+    public function setQueryString($queryString);
 
     /**
      * Get http headers

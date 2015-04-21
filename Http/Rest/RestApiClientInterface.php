@@ -29,69 +29,69 @@ interface RestApiClientInterface
     /**
      * Get
      *
-     * @param string  $path         The relative path to the webservice.
-     * @param array   $queryString  The specific queryString to the webservice.
-     * @param array   $headers      The optionnal headers.
-     * @param boolean $noCache      To force the request without check if a cache response exist.
-     * @param boolean $absolutePath To use absolute path instead of build it with api endpoint.
+     * @param string       $path         The relative path to the webservice.
+     * @param string|array $queryString  The specific queryString to the webservice.
+     * @param array        $headers      The optionnal headers.
+     * @param boolean      $noCache      To force the request without check if a cache response exist.
+     * @param boolean      $absolutePath To use absolute path instead of build it with api endpoint.
      *
      * @return Da\ApiClientBundle\Http\Response
      *
-     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
+     * @throw ApiHttpResponseException
      */
-    public function get($path, array $queryString = array(), array $headers = array(), $noCache = false, $absolutePath = false);
+    public function get($path, $queryString, array $headers = array(), $noCache = false, $absolutePath = false);
 
     /**
      * Post
      *
-     * @param string $path        The relative path to the webservice.
-     * @param array  $queryString The specific queryString to the webservice.
-     * @param array  $headers     The optionnal headers.
+     * @param string       $path        The relative path to the webservice.
+     * @param string|array $queryString The specific queryString to the webservice.
+     * @param array        $headers     The optionnal headers.
      *
-     * @return string
+     * @return Da\ApiClientBundle\Http\Response
      *
-     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
+     * @throw ApiHttpResponseException
      */
-    public function post($path, array $queryString = array(), array $headers = array());
+    public function post($path, $queryString, array $headers = array());
 
     /**
      * Put
      *
-     * @param string $path        The relative path to the webservice.
-     * @param array  $queryString The specific queryString to the webservice.
-     * @param array  $headers     The optionnal headers.
+     * @param string       $path        The relative path to the webservice.
+     * @param string|array $queryString The specific queryString to the webservice.
+     * @param array        $headers     The optionnal headers.
      *
-     * @return string
+     * @return Da\ApiClientBundle\Http\Response
      *
-     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
+     * @throw ApiHttpResponseException
      */
-    public function put($path, array $queryString = array(), array $headers = array());
+    public function put($path, $queryString, array $headers = array());
 
     /**
      * Patch
      *
-     * @param string $path        The relative path to the webservice.
-     * @param array  $queryString The specific queryString to the webservice.
-     * @param array  $headers     The optionnal headers.
+     * @param string       $path        The relative path to the webservice.
+     * @param string|array $queryString The specific queryString to the webservice.
+     * @param array        $headers     The optionnal headers.
      *
-     * @return string
+     * @return Da\ApiClientBundle\Http\Response
      *
-     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
+     * @throw ApiHttpResponseException
      */
-    public function patch($path, array $queryString = array(), array $headers = array());
+    public function patch($path, $queryString, array $headers = array());
 
     /**
      * Delete
      *
-     * @param string $path        The relative path to the webservice.
-     * @param array  $queryString The specific queryString to the webservice.
-     * @param array  $headers     The optionnal headers.
+     * @param string       $path        The relative path to the webservice.
+     * @param string|array $queryString The specific queryString to the webservice.
+     * @param array        $headers     The optionnal headers.
      *
-     * @return string
+     * @return Da\ApiClientBundle\Http\Response
      *
-     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
+     * @throw ApiHttpResponseException
      */
-    public function delete($path, array $queryString = array(), array $headers = array());
+    public function delete($path, $queryString, array $headers = array());
 
     /**
      * Link
@@ -100,9 +100,9 @@ interface RestApiClientInterface
      * @param array  $links       Array of resources to link.
      * @param array  $headers     The optionnal headers.
      *
-     * @return string
+     * @return Da\ApiClientBundle\Http\Response
      *
-     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
+     * @throw ApiHttpResponseException
      */
     public function link($path, array $links, array $headers = array());
 
@@ -113,9 +113,9 @@ interface RestApiClientInterface
      * @param array  $links       Array of resources to unlink.
      * @param array  $headers     The optionnal headers.
      *
-     * @return string
+     * @return Da\ApiClientBundle\Http\Response
      *
-     * @throw \Da\AuthCommonBundle\Exception\ApiHttpResponseException
+     * @throw ApiHttpResponseException
      */
     public function unlink($path, array $links, array $headers = array());
 }

@@ -83,7 +83,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function get($path, array $queryString = array(), array $headers = array(), $noCache = false, $absolutePath = false)
+    public function get($path, $queryString, array $headers = array(), $noCache = false, $absolutePath = false)
     {
         $path = self::addQueryString($path, $queryString);
 
@@ -93,7 +93,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function post($path, array $queryString = array(), array $headers = array())
+    public function post($path, $queryString, array $headers = array())
     {
         return $this->send('POST', $path, $headers, $queryString);
     }
@@ -101,7 +101,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function put($path, array $queryString = array(), array $headers = array())
+    public function put($path, $queryString, array $headers = array())
     {
         return $this->send('PUT', $path, $headers, $queryString);
     }
@@ -109,7 +109,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function patch($path, array $queryString = array(), array $headers = array())
+    public function patch($path, $queryString, array $headers = array())
     {
         return $this->send('PATCH', $path, $headers, $queryString);
     }
@@ -117,7 +117,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function delete($path, array $queryString = array(), array $headers = array())
+    public function delete($path, $queryString, array $headers = array())
     {
         return $this->send('DELETE', $path, $headers, $queryString);
     }
@@ -141,13 +141,13 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * Send a request to an API.
      *
-     * @param string  $method      The HTTP method.
-     * @param string  $path        The relative path to the webservice.
-     * @param array   $headers     The optionnal headers.
-     * @param array   $queryString The specific queryString to the webservice.
-     * @param array   $links       Array of resources to link.
-     * @param boolean $noCache      To force the request without check if a cache response exist.
-     * @param boolean $absolutePath To use absolute path instead of build it with api endpoint.
+     * @param string       $method       The HTTP method.
+     * @param string       $path         The relative path to the webservice.
+     * @param array        $headers      The optionnal headers.
+     * @param string|array $queryString  The specific queryString to the webservice.
+     * @param array        $links        Array of resources to link.
+     * @param boolean      $noCache      To force the request without check if a cache response exist.
+     * @param boolean      $absolutePath To use absolute path instead of build it with api endpoint.
      *
      * @return Da\ApiClientBundle\Http\Response
      *
@@ -157,7 +157,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
         $method,
         $path,
         array $headers = array(),
-        array $queryString = null,
+        $queryString = null,
         array $links = null,
         $noCache = false,
         $absolutePath = false
@@ -180,10 +180,10 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
             ->setHeaders($headers)
         ;
 
-        if ($queryString) {
-            $transport->setQueryStrings($queryString);
+        if (null !== $queryString) {
+            $transport->setQueryString($queryString);
         }
-        if ($links) {
+        if (null !== $links) {
             $transport->setLinks($links);
         }
 

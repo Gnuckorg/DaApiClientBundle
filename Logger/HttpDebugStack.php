@@ -62,7 +62,7 @@ class HttpDebugStack implements HttpLoggerInterface
     /**
      * {@inheritdoc}
      */
-    public function startQuery($requestMethod, $requestUrl, array $requestHeaders = array(), array $requestQueryString = array())
+    public function startQuery($requestMethod, $requestUrl, array $requestHeaders = array(), $requestQueryString)
     {
         if (null !== $this->stopwatch) {
             $this->stopwatch->start('da_api_client', 'da_api_client');
