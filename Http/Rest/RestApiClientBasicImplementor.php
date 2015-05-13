@@ -59,12 +59,12 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * Add query string
      *
-     * @param string $path
-     * @param array  $queryString
+     * @param string       $path
+     * @param string|array $queryString
      *
      * @return string
      */
-    public static function addQueryString($path, array $queryString = array())
+    public static function addQueryString($path, $queryString = null)
     {
         if(null === $queryString) {
             return $path;
@@ -76,14 +76,14 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
                 preg_match("#\?$#", $path) ?
                 '' : '&'
             ) : '?',
-            http_build_query($queryString)
+            is_array($queryString) ? http_build_query($queryString) : $queryString
         );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($path, $queryString, array $headers = array(), $noCache = false, $absolutePath = false)
+    public function get($path, $queryString = null, array $headers = array(), $noCache = false, $absolutePath = false)
     {
         $path = self::addQueryString($path, $queryString);
 
@@ -93,7 +93,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function post($path, $queryString, array $headers = array())
+    public function post($path, $queryString = null, array $headers = array())
     {
         return $this->send('POST', $path, $headers, $queryString);
     }
@@ -101,7 +101,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function put($path, $queryString, array $headers = array())
+    public function put($path, $queryString = null, array $headers = array())
     {
         return $this->send('PUT', $path, $headers, $queryString);
     }
@@ -109,7 +109,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function patch($path, $queryString, array $headers = array())
+    public function patch($path, $queryString = null, array $headers = array())
     {
         return $this->send('PATCH', $path, $headers, $queryString);
     }
@@ -117,7 +117,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
     /**
      * {@inheritdoc}
      */
-    public function delete($path, $queryString, array $headers = array())
+    public function delete($path, $queryString = null, array $headers = array())
     {
         return $this->send('DELETE', $path, $headers, $queryString);
     }

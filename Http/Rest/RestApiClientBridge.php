@@ -89,7 +89,7 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
-    public function get($path, $queryString, array $headers = array(), $noCache = false, $absolutePath = false)
+    public function get($path, $queryString = null, array $headers = array(), $noCache = false, $absolutePath = false)
     {
         return $this->implementor->get($path, $queryString, $headers, $noCache, $absolutePath);
     }
@@ -97,7 +97,7 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
-    public function post($path, $queryString, array $headers = array())
+    public function post($path, $queryString = null, array $headers = array())
     {
         return $this->implementor->post($path, $queryString, $headers);
     }
@@ -105,7 +105,7 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
-    public function put($path, $queryString, array $headers = array())
+    public function put($path, $queryString = null, array $headers = array())
     {
         return $this->implementor->put($path, $queryString, $headers);
     }
@@ -113,7 +113,7 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
-    public function patch($path, $queryString, array $headers = array())
+    public function patch($path, $queryString = null, array $headers = array())
     {
         return $this->implementor->patch($path, $queryString, $headers);
     }
@@ -121,7 +121,7 @@ class RestApiClientBridge implements RestApiClientInterface
     /**
      * {@inheritdoc}
      */
-    public function delete($path, $queryString, array $headers = array())
+    public function delete($path, $queryString = null, array $headers = array())
     {
         return $this->implementor->delete($path, $queryString, $headers);
     }

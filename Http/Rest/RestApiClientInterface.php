@@ -39,7 +39,7 @@ interface RestApiClientInterface
      *
      * @throw ApiHttpResponseException
      */
-    public function get($path, $queryString, array $headers = array(), $noCache = false, $absolutePath = false);
+    public function get($path, $queryString = null, array $headers = array(), $noCache = false, $absolutePath = false);
 
     /**
      * Post
@@ -52,7 +52,7 @@ interface RestApiClientInterface
      *
      * @throw ApiHttpResponseException
      */
-    public function post($path, $queryString, array $headers = array());
+    public function post($path, $queryString = null, array $headers = array());
 
     /**
      * Put
@@ -65,7 +65,7 @@ interface RestApiClientInterface
      *
      * @throw ApiHttpResponseException
      */
-    public function put($path, $queryString, array $headers = array());
+    public function put($path, $queryString = null, array $headers = array());
 
     /**
      * Patch
@@ -78,7 +78,7 @@ interface RestApiClientInterface
      *
      * @throw ApiHttpResponseException
      */
-    public function patch($path, $queryString, array $headers = array());
+    public function patch($path, $queryString = null, array $headers = array());
 
     /**
      * Delete
@@ -91,7 +91,7 @@ interface RestApiClientInterface
      *
      * @throw ApiHttpResponseException
      */
-    public function delete($path, $queryString, array $headers = array());
+    public function delete($path, $queryString = null, array $headers = array());
 
     /**
      * Link
