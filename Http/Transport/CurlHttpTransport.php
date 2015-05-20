@@ -102,7 +102,12 @@ class CurlHttpTransport extends AbstractHttpTransport
     {
         return $this
             ->addCurlOption(CURLOPT_POST, true)
-            ->addCurlOption(CURLOPT_POSTFIELDS, $this->getQueryString())
+            ->addCurlOption(
+                CURLOPT_POSTFIELDS,
+                is_array($this->getQueryString()) ?
+                    http_build_query($this->getQueryString()) :
+                    $this->getQueryString()
+            )
         ;
     }
 
@@ -116,7 +121,12 @@ class CurlHttpTransport extends AbstractHttpTransport
         return $this
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'PUT')
-            ->addCurlOption(CURLOPT_POSTFIELDS, http_build_query($this->getQueryString()))
+            ->addCurlOption(
+                CURLOPT_POSTFIELDS,
+                is_array($this->getQueryString()) ?
+                    http_build_query($this->getQueryString()) :
+                    $this->getQueryString()
+            )
             ->addHeader('X-HTTP-Method-Override', 'PUT')
         ;
     }
@@ -131,7 +141,12 @@ class CurlHttpTransport extends AbstractHttpTransport
         return $this
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'PATCH')
-            ->addCurlOption(CURLOPT_POSTFIELDS, http_build_query($this->getQueryString()))
+            ->addCurlOption(
+                CURLOPT_POSTFIELDS,
+                is_array($this->getQueryString()) ?
+                    http_build_query($this->getQueryString()) :
+                    $this->getQueryString()
+            )
             ->addHeader('X-HTTP-Method-Override', 'PATCH')
         ;
     }
@@ -146,7 +161,12 @@ class CurlHttpTransport extends AbstractHttpTransport
         return $this
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'DELETE')
-            ->addCurlOption(CURLOPT_POSTFIELDS, http_build_query($this->getQueryString()))
+            ->addCurlOption(
+                CURLOPT_POSTFIELDS,
+                is_array($this->getQueryString()) ?
+                    http_build_query($this->getQueryString()) :
+                    $this->getQueryString()
+            )
             ->addHeader('X-HTTP-Method-Override', 'DELETE')
         ;
     }
