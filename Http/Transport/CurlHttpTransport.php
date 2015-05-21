@@ -118,13 +118,20 @@ class CurlHttpTransport extends AbstractHttpTransport
      */
     protected function buildPutRequest()
     {
+        /**
+            PHP BUG !
+            Use http_build_query and not self::http_build_query_for_curl
+            @see https://github.com/symfony/symfony/pull/10381
+            @see http://tools.ietf.org/html/draft-ietf-httpbis-p2-semantics-21#section-5.3.4
+            @see https://bugs.php.net/bug.php?id=55815
+         */
         return $this
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'PUT')
             ->addCurlOption(
                 CURLOPT_POSTFIELDS,
                 is_array($this->getQueryString()) ?
-                    self::http_build_query_for_curl($this->getQueryString()) :
+                    http_build_query($this->getQueryString()) :
                     $this->getQueryString()
             )
             ->addHeader('X-HTTP-Method-Override', 'PUT')
@@ -138,13 +145,20 @@ class CurlHttpTransport extends AbstractHttpTransport
      */
     protected function buildPatchRequest()
     {
+         /**
+            PHP BUG !
+            Use http_build_query and not self::http_build_query_for_curl
+            @see https://github.com/symfony/symfony/pull/10381
+            @see http://tools.ietf.org/html/draft-ietf-httpbis-p2-semantics-21#section-5.3.4
+            @see https://bugs.php.net/bug.php?id=55815
+         */
         return $this
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'PATCH')
             ->addCurlOption(
                 CURLOPT_POSTFIELDS,
                 is_array($this->getQueryString()) ?
-                    self::http_build_query_for_curl($this->getQueryString()) :
+                    http_build_query($this->getQueryString()) :
                     $this->getQueryString()
             )
             ->addHeader('X-HTTP-Method-Override', 'PATCH')
@@ -158,13 +172,20 @@ class CurlHttpTransport extends AbstractHttpTransport
      */
     protected function buildDeleteRequest()
     {
+        /**
+            PHP BUG !
+            Use http_build_query and not self::http_build_query_for_curl
+            @see https://github.com/symfony/symfony/pull/10381
+            @see http://tools.ietf.org/html/draft-ietf-httpbis-p2-semantics-21#section-5.3.4
+            @see https://bugs.php.net/bug.php?id=55815
+         */
         return $this
             ->addCurlOption(CURLOPT_POST, true)
             ->addCurlOption(CURLOPT_CUSTOMREQUEST, 'DELETE')
             ->addCurlOption(
                 CURLOPT_POSTFIELDS,
                 is_array($this->getQueryString()) ?
-                    self::http_build_query_for_curl($this->getQueryString()) :
+                    http_build_query($this->getQueryString()) :
                     $this->getQueryString()
             )
             ->addHeader('X-HTTP-Method-Override', 'DELETE')
