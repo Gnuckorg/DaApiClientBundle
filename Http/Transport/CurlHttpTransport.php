@@ -105,7 +105,7 @@ class CurlHttpTransport extends AbstractHttpTransport
             ->addCurlOption(
                 CURLOPT_POSTFIELDS,
                 is_array($this->getQueryString()) ?
-                    http_build_query($this->getQueryString()) :
+                    self::http_build_query_for_curl($this->getQueryString()) :
                     $this->getQueryString()
             )
         ;
@@ -124,7 +124,7 @@ class CurlHttpTransport extends AbstractHttpTransport
             ->addCurlOption(
                 CURLOPT_POSTFIELDS,
                 is_array($this->getQueryString()) ?
-                    http_build_query($this->getQueryString()) :
+                    self::http_build_query_for_curl($this->getQueryString()) :
                     $this->getQueryString()
             )
             ->addHeader('X-HTTP-Method-Override', 'PUT')
@@ -144,7 +144,7 @@ class CurlHttpTransport extends AbstractHttpTransport
             ->addCurlOption(
                 CURLOPT_POSTFIELDS,
                 is_array($this->getQueryString()) ?
-                    http_build_query($this->getQueryString()) :
+                    self::http_build_query_for_curl($this->getQueryString()) :
                     $this->getQueryString()
             )
             ->addHeader('X-HTTP-Method-Override', 'PATCH')
@@ -164,7 +164,7 @@ class CurlHttpTransport extends AbstractHttpTransport
             ->addCurlOption(
                 CURLOPT_POSTFIELDS,
                 is_array($this->getQueryString()) ?
-                    http_build_query($this->getQueryString()) :
+                    self::http_build_query_for_curl($this->getQueryString()) :
                     $this->getQueryString()
             )
             ->addHeader('X-HTTP-Method-Override', 'DELETE')
@@ -243,5 +243,34 @@ class CurlHttpTransport extends AbstractHttpTransport
         }
 
         return $headers;
+    }
+
+    /**
+     * Build http query that will be cUrl compliant
+     *
+     * @param array|object $arrays The data to transform.
+     * @param array        $new    The built array.
+     * @param string|null  $prefix The key to flatten if the value found is an array or an object.
+     *
+     * @return array A compliant cUrl data.
+     */
+    public static function http_build_query_for_curl($arrays, &$new = array(), $prefix = null)
+    {
+        if (is_object($arrays)) {
+            $arrays = get_object_vars($arrays);
+        }
+
+        foreach ($arrays AS $key => $value) {
+            $k = isset($prefix) ?
+                sprintf('%s[%s]', $prefix, $key) :
+                $key;
+            if (is_array($value) OR is_object($value)) {
+                self::http_build_query_for_curl($value, $new, $k);
+            } else {
+                $new[$k] = $value;
+            }
+        }
+
+        return $new;
     }
 }
