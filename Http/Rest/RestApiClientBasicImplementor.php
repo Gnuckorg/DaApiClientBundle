@@ -198,7 +198,7 @@ class RestApiClientBasicImplementor extends AbstractRestApiClientImplementor
                 $oauthRefresher = $this->container->get('da_oauth_client.authorization_refresher.oauth');
                 $oauthRefresher->refresh();
 
-                $response = $transport->send();
+                $response = $transport->send($noCache);
             } else {
                 throw $exception;
             }
