@@ -258,12 +258,13 @@ class Response
      */
     public function decodeContent()
     {
-        $headers = $this->headers->all();
-        if($headers['content-type'][0] === 'application/json' || $headers['content-type'][0] === 'application/json; charset=UTF-8') {
+        $contentType = $this->headers->get('content-type', 'text/plain');
+
+        if ($contentType === 'application/json' || $contentType === 'application/json; charset=UTF-8') {
             return json_decode($this->content, true);
         }
 
-        if($headers['content-type'][0] === 'text/xml' || $headers['content-type'][0] === 'text/xml; charset=UTF-8') {
+        if ($contentType === 'text/xml' || $contentType === 'text/xml; charset=UTF-8') {
             $xml = simplexml_load_string($this->content);
             $json = json_encode($xml);
 
