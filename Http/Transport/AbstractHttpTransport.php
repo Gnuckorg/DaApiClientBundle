@@ -237,7 +237,9 @@ abstract class AbstractHttpTransport implements HttpTransportInterface
                 $response->getUrl(),
                 $response->getStatusCode(),
                 $response->headers->all(),
-                $response->getContent()
+                $response->getContent(),
+                $this->getMethod(),
+                $this->getQueryString()
             );
         }
 

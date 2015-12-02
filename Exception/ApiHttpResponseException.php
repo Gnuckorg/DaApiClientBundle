@@ -20,6 +20,8 @@ class ApiHttpResponseException extends \Exception
     protected $httpCode;
     protected $headers;
     protected $body;
+    protected $method;
+    protected $queryString;
 
     /**
      * Constructor
@@ -29,21 +31,25 @@ class ApiHttpResponseException extends \Exception
      * @param array   $headers
      * @param string  $body
      */
-    public function __construct($url, $httpCode, $headers, $body)
+    public function __construct($url, $httpCode, $headers, $body, $method, $queryString)
     {
-        $this->url      = $url;
-        $this->httpCode = $httpCode;
-        $this->headers  = $headers;
-        $this->body     = $body;
+        $this->url         = $url;
+        $this->httpCode    = $httpCode;
+        $this->headers     = $headers;
+        $this->body        = $body;
+        $this->method      = $method;
+        $this->queryString = $queryString;
 
-        parent::__construct(sprintf('HTTP Api response error: (%s) %s',
+        parent::__construct(sprintf('HTTP Api response error: -%s- [%s] %s (%s)',
             $httpCode,
-            $url
+            $method,
+            $url,
+            json_encode($queryString, JSON_UNESCAPED_UNICODE)
         ));
     }
 
     /**
-     * GetUrl
+     * Get request url
      *
      * @return string
      */
@@ -53,7 +59,7 @@ class ApiHttpResponseException extends \Exception
     }
 
     /**
-     * GetHttpCode
+     * Get response status code
      *
      * @return integer
      */
@@ -63,7 +69,7 @@ class ApiHttpResponseException extends \Exception
     }
 
     /**
-     * GetBody
+     * Get response body
      *
      * @return string
      */
@@ -73,7 +79,9 @@ class ApiHttpResponseException extends \Exception
     }
 
     /**
-     * {@inheritdoc}
+     * Get response status code
+     *
+     * @return string
      */
     public function getStatusCode()
     {
@@ -81,10 +89,32 @@ class ApiHttpResponseException extends \Exception
     }
 
     /**
-     * {@inheritdoc}
+     * Get response headers
+     *
+     * @return string
      */
     public function getHeaders()
     {
         return $this->headers;
+    }
+
+    /**
+     * Get request method
+     *
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /**
+     * Get request query string
+     *
+     * @return mixed
+     */
+    public function getQueryString()
+    {
+        return $this->queryString;
     }
 }
