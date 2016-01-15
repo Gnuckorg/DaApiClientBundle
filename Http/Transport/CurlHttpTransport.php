@@ -37,6 +37,7 @@ class CurlHttpTransport extends AbstractHttpTransport
         $this
             ->addCurlOption(CURLOPT_RETURNTRANSFER, true)
             ->addCurlOption(CURLOPT_HEADER, true)
+            ->addCurlOption(CURLOPT_SAFE_UPLOAD, true)
         ;
     }
 
@@ -277,6 +278,12 @@ class CurlHttpTransport extends AbstractHttpTransport
      */
     public static function http_build_query_for_curl($arrays, &$new = array(), $prefix = null)
     {
+        if ($arrays instanceof \CURLFile) {
+            $new[$prefix] = $arrays;
+
+            return;
+        }
+
         if (is_object($arrays)) {
             $arrays = get_object_vars($arrays);
         }
