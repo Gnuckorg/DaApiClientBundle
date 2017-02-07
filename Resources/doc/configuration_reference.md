@@ -51,8 +51,8 @@ da_api_client:
 ```
 
 
-Setup the developpement environement (optional)
------------------------------------------------
+Setup the development environment (optional)
+--------------------------------------------
 
 In order to profile Api logs, enabled this feature:
 ```yaml
